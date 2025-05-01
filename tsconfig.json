@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": {
+      "@middleware/core": ["packages/core/src"],
+      "@middleware/express": ["packages/express/src"],
+      "@middleware/nest": ["packages/nest/src"]
+    }
+  },
+  "include": ["packages/*/src/**/*"]
+}

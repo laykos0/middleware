@@ -1,0 +1,30 @@
+{
+  "name": "middleware",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "npm run build:core && npm run build:express && npm run build:nest",
+    "build:core": "cd packages/core && npm run build",
+    "build:express": "cd packages/express && npm run build",
+    "build:nest": "cd packages/nest && npm run build",
+    "pack": "npm run pack:core && npm run pack:express && npm run pack:nest",
+    "pack:core": "cd packages/core && npm pack",
+    "pack:express": "cd packages/express && npm pack",
+    "pack:nest": "cd packages/nest && npm pack",
+    "bundle": "npm run build && npm run pack",
+    "sync-api": "npm run bundle && cd apps/nest-api && npm uninstall @middleware/nest && npm uninstall @middleware/core && npm install ../../packages/core/middleware-core-1.0.0.tgz && npm install ../../packages/nest/middleware-nest-1.0.0.tgz"
+  },
+  "workspaces": [
+    "packages/core",
+    "packages/express",
+    "packages/nest"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
