@@ -95,8 +95,8 @@ import {Request, Response, NextFunction} from 'express';
 @Injectable()
 export class SQLInjectionMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
-        console.log("RUNNING SQL INJECTION MIDDLE43434WARE")
-        detectSQLInjection("abc");
+        console.log("BANANINI")
+        detectSQLInjection("CHIMPANZINI");
         next();
     }
 }

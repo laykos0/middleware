@@ -7,13 +7,12 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
+    "declaration": true,
+    "baseUrl": ".",
     "paths": {
-      "@middleware/core": ["packages/core/src"],
-      "@middleware/express": ["packages/express/src"],
-      "@middleware/nest": ["packages/nest/src"]
+      "@middleware/core": ["packages/core/dist"],
+      "@middleware/express": ["packages/express/dist"],
+      "@middleware/nest": ["packages/nest/dist"]
     }
-  },
-  "include": ["packages/*/src/**/*"]
+  }
 }
