@@ -1,4 +1,4 @@
-import {LoggerHandler, RequestHandlerBuilder, RequestWrapper} from "@middleware/core";
+import {ProtoHandler, RequestHandlerBuilder, RequestWrapper} from "@middleware/core";
 import {Injectable, NestMiddleware} from '@nestjs/common';
 import {NextFunction, Request, Response} from 'express';
 
@@ -36,7 +36,7 @@ class NestBuilder extends RequestHandlerBuilder<Request> {
 export class SQLInjectionMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
         NestBuilder.intercept(req)
-            .then(LoggerHandler)
+            .then(ProtoHandler)
         next();
     }
 }
