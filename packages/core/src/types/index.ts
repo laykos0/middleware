@@ -14,11 +14,6 @@ export abstract class RequestWrapper<T> {
     // TODO ADD RESULT FUNCTIONS (detected, etc)
 }
 
-// TODO - FIGURE OUT HOW TO REMOVE THIS
-export abstract class RequestConverter<T> {
-    abstract getWrapper(req: T): RequestWrapper<T>
-}
-
 export abstract class RequestHandler {
     static handleRequest(wrapper: RequestWrapper<unknown>): void {}
 }
@@ -48,29 +43,5 @@ export class RequestHandlerBuilder<T> {
         }
         HandlerClass.handleRequest(this.wrapper);
         return this;
-    }
-}
-
-class StringRequestWrapper extends RequestWrapper<string> {
-    private _method= "GET"
-
-    constructor(request: string) {
-        super(request);
-    }
-
-    set method(newMethod: string) {
-        this._method = newMethod;
-    }
-
-    get method(): string {
-        return this._method;
-    }
-
-    set url(newUrl: string) {
-        this.request = newUrl;
-    }
-
-    get url(): string {
-        return this.request;
     }
 }
