@@ -1,13 +1,6 @@
-// src/nestMiddleware.ts
-import {detectSQLInjection} from "@middleware/core";
+import {LoggerHandler, RequestHandlerBuilder, RequestWrapper} from "@middleware/core";
 import {Injectable, NestMiddleware} from '@nestjs/common';
-import {Request, Response, NextFunction} from 'express';
-import {
-    ExampleRequestLogger,
-    RequestConverter,
-    RequestHandlerBuilder,
-    RequestWrapper
-} from "@middleware/core/dist/types";
+import {NextFunction, Request, Response} from 'express';
 
 
 class NestRequestWrapper extends RequestWrapper<Request> {
@@ -32,31 +25,18 @@ class NestRequestWrapper extends RequestWrapper<Request> {
     }
 }
 
-class NestRequestConverter extends RequestConverter<Request> {
-    getWrapper(request: Request): RequestWrapper<Request> {
-        return new NestRequestWrapper(request);
+class NestBuilder extends RequestHandlerBuilder<Request> {
+    static intercept(req: Request) {
+        return new RequestHandlerBuilder(NestRequestWrapper, req);
     }
 }
 
+// TODO: RENAME MIDDLEWARE
 @Injectable()
 export class SQLInjectionMiddleware implements NestMiddleware {
-    converter = new NestRequestConverter();
-    handler = new RequestHandlerBuilder(this.converter);
-    logger = new ExampleRequestLogger();
-
     use(req: Request, res: Response, next: NextFunction) {
-        console.log("RUNNING SQL INJECTION MIDDLEWARE")
-        console.log("BANANINI")
-        detectSQLInjection("CHIMPANZINI");
-
-        this.handler
-            .intercept(req)
-            .then(this.logger)
-
-        // if (detectSQLInjection(context)) {
-        //     return res.status(400).send('Potential SQL Injection detected');
-        // }
-
+        NestBuilder.intercept(req)
+            .then(LoggerHandler)
         next();
     }
 }
