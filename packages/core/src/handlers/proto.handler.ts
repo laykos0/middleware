@@ -1,9 +1,12 @@
-import { RequestHandler, RequestWrapper } from '@middleware/core';
+import {RequestHandler, RequestWrapper} from "../types/index";
 
 export class ProtoHandler extends RequestHandler {
-    static handleRequest(wrapper: RequestWrapper<unknown>) {
+    static handleRequest(wrapper:
+                         RequestWrapper<unknown>) {
         console.log(`Request Method: ${wrapper.method}`);
         console.log(`Request URL: ${wrapper.url}`);
+        console.log("QQQQ")
+        console.log("TESTDDD RESTART")
         return wrapper;
     }
 }

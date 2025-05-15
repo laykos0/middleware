@@ -9,6 +9,12 @@
     "build:core": "cd packages/core && npm run build",
     "build:express": "cd packages/express && npm run build",
     "build:nest": "cd packages/nest && npm run build",
+
+    "watch:core":    "cd packages/core && tsc -b -w",
+    "watch:express": "cd packages/express && tsc -b -w",
+    "watch:nest":    "cd packages/nest && tsc -b -w",
+    "watch:all": "concurrently -k -n CORE,EXPRESS,NEST \"npm run watch:core\" \"npm run watch:express\" \"npm run watch:nest\"",
+
     "dev:api": "npm run build && cd apps/nest-api && npm run start:dev"
   },
   "workspaces": [
@@ -20,6 +26,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "typescript": "^5.8.3"
   }
 }

@@ -1,4 +1,10 @@
 {
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/express" },
+    { "path": "packages/nest" }
+  ],
   "compilerOptions": {
     "target": "ES6",
     "module": "commonjs",
@@ -13,6 +19,6 @@
       "@middleware/core": ["packages/core/dist"],
       "@middleware/express": ["packages/express/dist"],
       "@middleware/nest": ["packages/nest/dist"]
-    }
+    },
   }
 }

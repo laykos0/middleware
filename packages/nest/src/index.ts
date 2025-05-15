@@ -36,7 +36,8 @@ class NestBuilder extends RequestHandlerBuilder<Request> {
 export class SQLInjectionMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
         NestBuilder.intercept(req)
-            .then(ProtoHandler)
+            .then(ProtoHandler);
+        console.log("BBBBC");
         next();
     }
 }
