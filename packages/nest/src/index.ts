@@ -37,7 +37,6 @@ export class SQLInjectionMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
         NestBuilder.intercept(req)
             .then(ProtoHandler);
-        console.log("BBBBC");
         next();
     }
 }

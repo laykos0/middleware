@@ -5,8 +5,6 @@ export class ProtoHandler extends RequestHandler {
                          RequestWrapper<unknown>) {
         console.log(`Request Method: ${wrapper.method}`);
         console.log(`Request URL: ${wrapper.url}`);
-        console.log("QQQQ")
-        console.log("TESTDDD RESTART")
         return wrapper;
     }
 }
