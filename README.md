@@ -22,10 +22,10 @@ Install all dependencies from the root directory:
 npm install
 ```
 
-Build all packages:
+Start dynamic builds (watch mode) for all packages, which automatically rebuild on file changes:
 
 ```bash
-npm run build
+npm run watch:all
 ```
 
 ## Running the Example API
@@ -35,7 +35,7 @@ Navigate to the NestJS example application:
 ```bash
 cd apps/nest-api
 npm install
-npm run start:dev
+npm run start:nodemon
 ```
 
 ## Usage
