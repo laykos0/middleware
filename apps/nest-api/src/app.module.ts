@@ -10,6 +10,6 @@ import { SQLInjectionMiddleware } from '@middleware/nest';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(SQLInjectionMiddleware).forRoutes('*');
+    consumer.apply(SQLInjectionMiddleware, "//B&*+").forRoutes('*');
   }
 }

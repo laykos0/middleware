@@ -12,6 +12,9 @@ export abstract class RequestWrapper<T> {
     abstract set url(newUrl: string)
     abstract get url(): string
     // TODO ADD RESULT FUNCTIONS (detected, etc)
+
+    abstract set body(body: string)
+    abstract get body(): string
 }
 
 export abstract class RequestHandler {
@@ -41,7 +44,11 @@ export class RequestHandlerBuilder<T> {
         if (!this.wrapper) {
             throw new Error("No request to handle");
         }
-        HandlerClass.handleRequest(this.wrapper);
+        try {
+            HandlerClass.handleRequest(this.wrapper);
+        } catch (e) {
+            console.error("Unhandled handler exception", HandlerClass.name, e);
+        }
         return this;
     }
 }
