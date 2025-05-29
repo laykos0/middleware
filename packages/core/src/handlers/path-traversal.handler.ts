@@ -1,5 +1,9 @@
 import {RequestHandler, RequestWrapper} from "../types/index";
 
+export interface PathTraversalHandlerOptions {
+    strict?: boolean;
+}
+
 export class PathTraversalHandler extends RequestHandler {
     static handleRequest(wrapper: RequestWrapper<unknown>) {
 

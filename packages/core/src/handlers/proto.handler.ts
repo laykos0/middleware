@@ -12,6 +12,10 @@ const REJECT_LIST = [
     new Replacement("Prototype", /prototype/g, "REMOVED_PROTOTYPE")
 ]
 
+export interface ProtoHandlerOptions {
+    configuration: string[];
+}
+
 export class ProtoHandler extends RequestHandler {
 
     static handleRequest(wrapper: RequestWrapper<unknown>) {

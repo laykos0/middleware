@@ -2,6 +2,10 @@ import {RequestHandler, RequestWrapper} from "../types";
 import sanitizeHtml from 'sanitize-html';
 import sanitize from "sanitize-html";
 
+export interface XSSHandlerOptions {
+    sanitizeLevel?: 'low' | 'medium' | 'high';
+}
+
 export class XSSHandler extends RequestHandler {
     private static sanitizeOptions: sanitize.IOptions = {
         // TODO MAKE THIS CONFIGURABLE

@@ -17,6 +17,8 @@ export abstract class RequestWrapper<T> {
     abstract get body(): string | undefined
 }
 
+
+
 export abstract class RequestHandler {
     static handleRequest(wrapper: RequestWrapper<unknown>): void {}
 }
