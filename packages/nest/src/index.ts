@@ -43,7 +43,7 @@ class NestRequestWrapper extends RequestWrapper<Request> {
 
 class NestBuilder extends RequestHandlerBuilder<Request> {
     static intercept(req: Request) {
-        return new RequestHandlerBuilder(NestRequestWrapper, req);
+        return new RequestHandlerBuilder(NestRequestWrapper, {}, req);
     }
 }
 
@@ -59,6 +59,8 @@ export function secureMiddleware(options: SecureMiddlewareOptions) {
         };
 
         NestBuilder.intercept(req)
+            // Should we have SetOptions?
+            .setOptions(options)
             .then(ProtoHandler)
             .then(XSSHandler)
             .then(PathTraversalHandler);

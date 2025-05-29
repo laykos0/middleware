@@ -1,3 +1,6 @@
+import {SecureMiddlewareOptions} from "../handlers";
+import {options} from "sanitize-html";
+
 export abstract class RequestWrapper<T> {
     protected request: T
 
@@ -20,7 +23,7 @@ export abstract class RequestWrapper<T> {
 
 
 export abstract class RequestHandler {
-    static handleRequest(wrapper: RequestWrapper<unknown>): void {}
+    static handleRequest(wrapper: RequestWrapper<unknown>, options: SecureMiddlewareOptions): void {}
 }
 
 type WrapperCtor<T> = new (req: T) => RequestWrapper<T>;
@@ -29,15 +32,22 @@ export class RequestHandlerBuilder<T> {
 
     constructor(
         private readonly Wrapper: WrapperCtor<T>,
-        private readonly request?: T
+        private options: SecureMiddlewareOptions,
+        private readonly request?: T,
     ) {
         if (request !== undefined) {
             this.wrapper = new this.Wrapper(request);
         }
+        this.options = options;
     }
 
     intercept(request: T): RequestHandlerBuilder<T> {
-        return new RequestHandlerBuilder(this.Wrapper, request);
+        return new RequestHandlerBuilder(this.Wrapper, this.options, request);
+    }
+
+    setOptions(options: SecureMiddlewareOptions): RequestHandlerBuilder<T> {
+        this.options = options;
+        return this
     }
 
     then<H extends typeof RequestHandler>(
@@ -47,7 +57,7 @@ export class RequestHandlerBuilder<T> {
             throw new Error("No request to handle");
         }
         try {
-            HandlerClass.handleRequest(this.wrapper);
+            HandlerClass.handleRequest(this.wrapper, this.options);
         } catch (e) {
             console.error("Unhandled handler exception", HandlerClass.name, e);
         }

@@ -1,11 +1,12 @@
 import {RequestHandler, RequestWrapper} from "../types/index";
+import {SecureMiddlewareOptions} from "./index";
 
 export interface PathTraversalHandlerOptions {
     strict?: boolean;
 }
 
 export class PathTraversalHandler extends RequestHandler {
-    static handleRequest(wrapper: RequestWrapper<unknown>) {
+    static handleRequest(wrapper: RequestWrapper<unknown>, options: SecureMiddlewareOptions) {
 
         console.log("================= PATH_TRAVERSAL ============")
         console.log(wrapper.body);
