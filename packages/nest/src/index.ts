@@ -1,8 +1,5 @@
-import {ProtoHandler, RequestHandlerBuilder, RequestWrapper, SQLInjectHandler} from "@middleware/core";
-import {PathTraversalHandler} from "@middleware/core/dist/handlers/path-traversal.handler";
-import { Injectable, Inject, NestMiddleware, MiddlewareConsumer, Module, DynamicModule, NestModule } from '@nestjs/common';
+import {ProtoHandler, RequestHandlerBuilder, RequestWrapper,XSSHandler, PathTraversalHandler} from "@middleware/core";
 import {NextFunction, Request, Response} from 'express';
-import {XSSHandler} from "@middleware/core/dist/handlers/xss.handler";
 
 
 class NestRequestWrapper extends RequestWrapper<Request> {
@@ -43,11 +40,10 @@ class NestBuilder extends RequestHandlerBuilder<Request> {
     }
 }
 
-@Injectable()
-export class SecureMiddleware implements NestMiddleware {
-    constructor(@Inject(SECURE_MIDDLEWARE_OPTIONS) private options: SecureMiddlewareOptions) {}
 
-    use(req: Request, res: Response, next: NextFunction) {
+
+export function secureMiddleware(options: SecureMiddlewareOptions) {
+    return (req: Request, res: Response, next: NextFunction) => {
         const originalRequest = {
             method: req.method,
             url: req.url,
@@ -56,39 +52,21 @@ export class SecureMiddleware implements NestMiddleware {
             query: { ...req.query },
             params: { ...req.params },
         };
+
+        console.log('Middleware options:', options);
+
         NestBuilder.intercept(req)
             .then(ProtoHandler)
             .then(XSSHandler)
-            .then(PathTraversalHandler)
+            .then(PathTraversalHandler);
 
         NestBuilder.intercept(originalRequest as Request)
             .then(PathTraversalHandler);
+
         next();
-    }
+    };
 }
 
 export interface SecureMiddlewareOptions {
     logLevel?: 'info' | 'warn' | 'error';
-}
-export const SECURE_MIDDLEWARE_OPTIONS = Symbol('SECURE_MIDDLEWARE_OPTIONS');
-
-@Module({})
-export class SecureMiddlewareModule implements NestModule {
-    static forRoot(options: SecureMiddlewareOptions): DynamicModule {
-        return {
-            module: SecureMiddlewareModule,
-            providers: [
-                {
-                    provide: SECURE_MIDDLEWARE_OPTIONS,
-                    useValue: options,
-                },
-                SecureMiddleware
-            ],
-            exports: [SecureMiddleware],
-        };
-    }
-
-    configure(consumer: MiddlewareConsumer) {
-        consumer.apply(SecureMiddleware).forRoutes('*');
-    }
 }

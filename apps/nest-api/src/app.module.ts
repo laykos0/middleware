@@ -1,19 +1,20 @@
 import {MiddlewareConsumer, Module, NestModule} from '@nestjs/common';
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
-import {SecureMiddleware, SecureMiddlewareModule} from '@middleware/nest';
+import {secureMiddleware, SecureMiddlewareOptions} from '@middleware/nest';
+
+const secureMiddlewareOptions: SecureMiddlewareOptions = {
+  logLevel: 'info',
+};
+
 
 @Module({
-  imports: [
-    SecureMiddlewareModule.forRoot({
-      logLevel: 'info',
-    }),
-  ],
+  imports: [],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
-  configure() {
-
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(secureMiddleware(secureMiddlewareOptions)).forRoutes('*');
   }
 }
