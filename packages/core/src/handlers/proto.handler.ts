@@ -23,7 +23,7 @@ export class ProtoHandler extends RequestHandler {
             REJECT_LIST.forEach((replacement) => {
                 // Check if this is better than just a replacement
                 if (replacement.regex.test(body)) {
-                    body = JSON.parse(body.replace(replacement.regex, replacement.replacement));
+                    body = body.replace(replacement.regex, replacement.replacement);
                     console.log("Removed " + replacement.name + " in body")
                 }
             })

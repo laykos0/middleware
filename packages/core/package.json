@@ -6,7 +6,10 @@
   "scripts": {
     "build": "tsc -p tsconfig.json"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/sanitize-html": "^2.16.0",
+    "sanitize-html": "^2.16.0"
+  },
   "devDependencies": {
     "typescript": "^5.3.0"
   }

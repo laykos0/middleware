@@ -3,6 +3,11 @@ import {IsNotEmpty, IsOptional, IsString} from "class-validator";
 
 export class ProtoDTO {
     @ApiProperty({example: "__proto__: abc"}) @IsNotEmpty() @IsString() name: string;
+    @ApiProperty({example: "constructor: prototype"}) @IsNotEmpty() @IsString() password: string;
+}
+
+export class HtmlDTO {
+    @ApiProperty({example: "<script>alert(1)</script><br><div>Hello world</div>"}) @IsNotEmpty() @IsString() textForm: string;
 }
 
 export class TestDTO {

@@ -2,6 +2,7 @@ import {ProtoHandler, RequestHandlerBuilder, RequestWrapper, SQLInjectHandler} f
 import {PathTraversalHandler} from "@middleware/core/dist/handlers/path-traversal.handler";
 import {Injectable, NestMiddleware} from '@nestjs/common';
 import {NextFunction, Request, Response} from 'express';
+import {XSSHandler} from "@middleware/core/dist/handlers/xss.handler";
 
 
 class NestRequestWrapper extends RequestWrapper<Request> {
@@ -56,6 +57,8 @@ export class SQLInjectionMiddleware implements NestMiddleware {
         };
         NestBuilder.intercept(req)
             .then(ProtoHandler)
+            .then(XSSHandler)
+            .then(PathTraversalHandler)
 
         NestBuilder.intercept(originalRequest as Request)
             .then(PathTraversalHandler);
