@@ -1,6 +1,6 @@
 import {ProtoHandler, RequestHandlerBuilder, RequestWrapper, SQLInjectHandler} from "@middleware/core";
 import {PathTraversalHandler} from "@middleware/core/dist/handlers/path-traversal.handler";
-import {Injectable, NestMiddleware} from '@nestjs/common';
+import { Injectable, Inject, NestMiddleware, MiddlewareConsumer, Module, DynamicModule, NestModule } from '@nestjs/common';
 import {NextFunction, Request, Response} from 'express';
 import {XSSHandler} from "@middleware/core/dist/handlers/xss.handler";
 
@@ -43,9 +43,10 @@ class NestBuilder extends RequestHandlerBuilder<Request> {
     }
 }
 
-// TODO: RENAME MIDDLEWARE
 @Injectable()
-export class SQLInjectionMiddleware implements NestMiddleware {
+export class SecureMiddleware implements NestMiddleware {
+    constructor(@Inject(SECURE_MIDDLEWARE_OPTIONS) private options: SecureMiddlewareOptions) {}
+
     use(req: Request, res: Response, next: NextFunction) {
         const originalRequest = {
             method: req.method,
@@ -63,5 +64,31 @@ export class SQLInjectionMiddleware implements NestMiddleware {
         NestBuilder.intercept(originalRequest as Request)
             .then(PathTraversalHandler);
         next();
+    }
+}
+
+export interface SecureMiddlewareOptions {
+    logLevel?: 'info' | 'warn' | 'error';
+}
+export const SECURE_MIDDLEWARE_OPTIONS = Symbol('SECURE_MIDDLEWARE_OPTIONS');
+
+@Module({})
+export class SecureMiddlewareModule implements NestModule {
+    static forRoot(options: SecureMiddlewareOptions): DynamicModule {
+        return {
+            module: SecureMiddlewareModule,
+            providers: [
+                {
+                    provide: SECURE_MIDDLEWARE_OPTIONS,
+                    useValue: options,
+                },
+                SecureMiddleware
+            ],
+            exports: [SecureMiddleware],
+        };
+    }
+
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(SecureMiddleware).forRoutes('*');
     }
 }
