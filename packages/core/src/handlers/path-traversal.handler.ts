@@ -1,15 +1,18 @@
-import {RequestHandler, RequestWrapper} from "../types/index";
-import {SecureMiddlewareOptions} from "./index";
+import {RequestHandler, RequestWrapper} from "../types";
+import {DefaultHandlerOptions} from "./index";
 
-export interface PathTraversalHandlerOptions {
+export interface PathTraversalHandlerOptions extends DefaultHandlerOptions {
     strict?: boolean;
 }
 
 export class PathTraversalHandler extends RequestHandler {
-    static handleRequest(wrapper: RequestWrapper<unknown>, options: SecureMiddlewareOptions) {
+    static handleRequest<PathTraversalHandlerOptions>(wrapper: RequestWrapper<unknown>, options: PathTraversalHandlerOptions) {
 
+        console.log();
         console.log("================= PATH_TRAVERSAL ============")
-        console.log(wrapper.body);
+        console.log("PATH_TRAVERSAL_OPTIONS", options)
+
+
         const body = JSON.stringify(wrapper.body);
         // console.log(body)
         // const targetPath = path.resolve(base, target);

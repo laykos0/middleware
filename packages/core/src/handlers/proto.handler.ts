@@ -1,5 +1,5 @@
 import {RequestHandler, RequestWrapper} from "../types";
-import {SecureMiddlewareOptions} from "./index";
+import {DefaultHandlerOptions} from "./index";
 
 class Replacement {
     constructor(public name: string, public regex: RegExp, public replacement: string) {
@@ -13,7 +13,7 @@ const REPLACE_LIST: Replacement[] = [
     new Replacement("Prototype", /prototype/g, "REMOVED_PROTOTYPE")
 ]
 
-export interface ProtoHandlerOptions {
+export interface ProtoHandlerOptions extends DefaultHandlerOptions{
     enable_proto_removal: boolean;
     enable_constructor_removal: boolean;
     enable_prototype_removal: boolean;
@@ -21,8 +21,11 @@ export interface ProtoHandlerOptions {
 
 export class ProtoHandler extends RequestHandler {
 
-    static handleRequest(wrapper: RequestWrapper<unknown>, options: SecureMiddlewareOptions) {
+    static handleRequest<ProtoHandlerOptions>(wrapper: RequestWrapper<unknown>, options: ProtoHandlerOptions) {
+        console.log();
         console.log("================= PROTO ============")
+        console.log("PROTO_OPTIONS", options)
+
         let body = JSON.stringify(wrapper.body);
 
         if (body) {

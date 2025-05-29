@@ -48,32 +48,17 @@ class NestResponseWrapper extends ResponseWrapper<Response> {
 
 
 class NestBuilder extends RequestHandlerBuilder<Request, Response> {
-    static intercept(req: Request) {
-        return new RequestHandlerBuilder(NestRequestWrapper, NestResponseWrapper, {}, req);
+    static intercept(options: SecureMiddlewareOptions, req?: Request, res?: Response) {
+        return new RequestHandlerBuilder(NestRequestWrapper, NestResponseWrapper, options, req, res);
     }
 }
 
 export function secureMiddleware(options: SecureMiddlewareOptions) {
     return (req: Request, res: Response, next: NextFunction) => {
-        const originalRequest = {
-            method: req.method,
-            url: req.url,
-            headers: {...req.headers},
-            body: {...req.body},
-            query: {...req.query},
-            params: {...req.params},
-        };
-
-        NestBuilder.intercept(req)
-            // Should we have SetOptions?
-            .setOptions(options)
+        NestBuilder.intercept(options, req, res)
             .then(ProtoHandler)
             .then(XSSHandler)
             .then(PathTraversalHandler);
-
-        NestBuilder.intercept(originalRequest as Request)
-            .then(PathTraversalHandler);
-
         next();
     };
 }

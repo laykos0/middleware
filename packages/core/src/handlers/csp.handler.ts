@@ -1,8 +1,11 @@
 import {RequestHandler, RequestWrapper} from "../types/index";
-import {SecureMiddlewareOptions} from "./index";
+import {DefaultHandlerOptions, SecureMiddlewareOptions} from "./index";
+
+export interface CSPHandlerOptions extends DefaultHandlerOptions {
+}
 
 export class CspHandler extends RequestHandler {
-    static handleRequest(wrapper: RequestWrapper<unknown>, options: SecureMiddlewareOptions) {
+    static handleRequest<CSPHandlerOptions>(wrapper: RequestWrapper<unknown>, options: CSPHandlerOptions) {
 
         return wrapper;
     }

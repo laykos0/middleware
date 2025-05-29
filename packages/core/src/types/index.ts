@@ -1,4 +1,4 @@
-import {SecureMiddlewareOptions} from "../handlers";
+import {HandlerName, SecureMiddlewareOptions} from "../handlers";
 import {options} from "sanitize-html";
 
 export abstract class RequestWrapper<T> {
@@ -35,7 +35,7 @@ export abstract class ResponseWrapper<T> {
 
 
 export abstract class RequestHandler {
-    static handleRequest(wrapper: RequestWrapper<unknown>, options: SecureMiddlewareOptions): void {
+    static handleRequest<T>(wrapper: RequestWrapper<unknown>, options: T): void {
     }
 }
 
@@ -49,7 +49,7 @@ export class RequestHandlerBuilder<Req, Res> {
     constructor(
         private readonly ReqWrapper: ReqWrapperCtor<Req>,
         private readonly ResWrapper: ResWrapperCtor<Res>,
-        private options: SecureMiddlewareOptions,
+        private readonly options: SecureMiddlewareOptions,
         private readonly request?: Req,
         private readonly response?: Res,
     ) {
@@ -59,16 +59,6 @@ export class RequestHandlerBuilder<Req, Res> {
         if (response !== undefined) {
             this.responseWrapper = new this.ResWrapper(response);
         }
-        this.options = options;
-    }
-
-    intercept(request: Req): RequestHandlerBuilder<Req, Res> {
-        return new RequestHandlerBuilder(this.ReqWrapper, this.ResWrapper, this.options, request);
-    }
-
-    setOptions(options: SecureMiddlewareOptions): RequestHandlerBuilder<Req, Res> {
-        this.options = options;
-        return this
     }
 
     then<H extends typeof RequestHandler>(
@@ -78,7 +68,11 @@ export class RequestHandlerBuilder<Req, Res> {
             throw new Error("No request to handle");
         }
         try {
-            HandlerClass.handleRequest(this.requestWrapper, this.options);
+            const handlerOptions = this.options.handlers?.[HandlerClass.name as HandlerName];
+            if (!handlerOptions) {
+                throw new Error("Missing handler options");
+            }
+            HandlerClass.handleRequest(this.requestWrapper, handlerOptions);
         } catch (e) {
             console.error("Unhandled handler exception", HandlerClass.name, e);
         }

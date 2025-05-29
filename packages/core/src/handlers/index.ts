@@ -7,17 +7,17 @@ import {ProtoHandlerOptions} from './proto.handler'
 import {XSSHandlerOptions} from './xss.handler'
 import {PathTraversalHandlerOptions} from './path-traversal.handler'
 
-interface DefaultHandlerOptions {
+export interface DefaultHandlerOptions {
     enabled: boolean;
 }
 
 interface HandlerOptionsMap {
-    ProtoHandler: ProtoHandlerOptions & DefaultHandlerOptions;
-    XSSHandler: XSSHandlerOptions & DefaultHandlerOptions;
-    PathTraversalHandler: PathTraversalHandlerOptions & DefaultHandlerOptions;
+    ProtoHandler: ProtoHandlerOptions;
+    XSSHandler: XSSHandlerOptions;
+    PathTraversalHandler: PathTraversalHandlerOptions;
 }
 
-type HandlerName = keyof HandlerOptionsMap;
+export type HandlerName = keyof HandlerOptionsMap;
 
 export interface SecureMiddlewareOptions {
     handlers?: Partial<{

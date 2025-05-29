@@ -1,9 +1,9 @@
 import {RequestHandler, RequestWrapper} from "../types";
 import sanitizeHtml from 'sanitize-html';
-import sanitize from "sanitize-html";
-import {SecureMiddlewareOptions} from "./index";
+import sanitize from 'sanitize-html';
+import {DefaultHandlerOptions} from "./index";
 
-export interface XSSHandlerOptions {
+export interface XSSHandlerOptions extends DefaultHandlerOptions {
     sanitizeLevel?: 'low' | 'medium' | 'high';
 }
 
@@ -14,8 +14,11 @@ export class XSSHandler extends RequestHandler {
         allowedAttributes: {}
     };
 
-    static handleRequest(wrapper: RequestWrapper<unknown>, options: SecureMiddlewareOptions) {
+    static handleRequest<XSSHandlerOptions>(wrapper: RequestWrapper<unknown>, options: XSSHandlerOptions) {
         let hasChangedRequest = false;
+        console.log();
+        console.log("================= XSS ============")
+        console.log("XSS_OPTIONS", options)
 
         const sanitizeString = (input: string) => {
             const newHtml = sanitizeHtml(input, this.sanitizeOptions);
