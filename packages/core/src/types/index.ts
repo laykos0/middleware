@@ -14,7 +14,7 @@ export abstract class RequestWrapper<T> {
     // TODO ADD RESULT FUNCTIONS (detected, etc)
 
     abstract set body(body: string)
-    abstract get body(): string
+    abstract get body(): string | undefined
 }
 
 export abstract class RequestHandler {
