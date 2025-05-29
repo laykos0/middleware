@@ -4,7 +4,7 @@ import {options} from "sanitize-html";
 export abstract class RequestWrapper<T> {
     protected request: T
 
-    protected constructor(request: T) {
+    constructor(request: T) {
         this.request = request
     }
 
@@ -14,50 +14,71 @@ export abstract class RequestWrapper<T> {
 
     abstract set url(newUrl: string)
     abstract get url(): string
+
     // TODO ADD RESULT FUNCTIONS (detected, etc)
 
     abstract set body(body: string)
     abstract get body(): string | undefined
 }
 
+export abstract class ResponseWrapper<T> {
+    protected response: T
+
+    constructor(response: T) {
+        this.response = response
+    }
+
+    abstract setHeader(key: string, value: string): void
+
+    abstract getHeader(key: string): string | undefined
+}
 
 
 export abstract class RequestHandler {
-    static handleRequest(wrapper: RequestWrapper<unknown>, options: SecureMiddlewareOptions): void {}
+    static handleRequest(wrapper: RequestWrapper<unknown>, options: SecureMiddlewareOptions): void {
+    }
 }
 
-type WrapperCtor<T> = new (req: T) => RequestWrapper<T>;
-export class RequestHandlerBuilder<T> {
-    private readonly wrapper?: RequestWrapper<T>;
+type ReqWrapperCtor<T> = new (req: T) => RequestWrapper<T>;
+type ResWrapperCtor<T> = new (req: T) => ResponseWrapper<T>;
+
+export class RequestHandlerBuilder<Req, Res> {
+    private readonly requestWrapper?: RequestWrapper<Req>;
+    private readonly responseWrapper?: ResponseWrapper<Res>;
 
     constructor(
-        private readonly Wrapper: WrapperCtor<T>,
+        private readonly ReqWrapper: ReqWrapperCtor<Req>,
+        private readonly ResWrapper: ResWrapperCtor<Res>,
         private options: SecureMiddlewareOptions,
-        private readonly request?: T,
+        private readonly request?: Req,
+        private readonly response?: Res,
     ) {
         if (request !== undefined) {
-            this.wrapper = new this.Wrapper(request);
+            this.requestWrapper = new this.ReqWrapper(request);
+        }
+        if (response !== undefined) {
+            this.responseWrapper = new this.ResWrapper(response);
         }
         this.options = options;
     }
 
-    intercept(request: T): RequestHandlerBuilder<T> {
-        return new RequestHandlerBuilder(this.Wrapper, this.options, request);
+    intercept(request: Req): RequestHandlerBuilder<Req, Res> {
+        return new RequestHandlerBuilder(this.ReqWrapper, this.ResWrapper, this.options, request);
     }
 
-    setOptions(options: SecureMiddlewareOptions): RequestHandlerBuilder<T> {
+    setOptions(options: SecureMiddlewareOptions): RequestHandlerBuilder<Req, Res> {
         this.options = options;
         return this
     }
 
     then<H extends typeof RequestHandler>(
         HandlerClass: H
-    ): RequestHandlerBuilder<T> {
-        if (!this.wrapper) {
+    ): RequestHandlerBuilder<Req, Res> {
+        if (!this.requestWrapper) {
             throw new Error("No request to handle");
         }
         try {
-            HandlerClass.handleRequest(this.wrapper, this.options);
+            HandlerClass.handleRequest(this.requestWrapper, this.options);
         } catch (e) {
             console.error("Unhandled handler exception", HandlerClass.name, e);
         }

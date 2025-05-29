@@ -4,16 +4,12 @@ import {
     RequestWrapper,
     XSSHandler,
     PathTraversalHandler,
-    SecureMiddlewareOptions
+    SecureMiddlewareOptions, ResponseWrapper
 } from "@middleware/core";
 import {NextFunction, Request, Response} from 'express';
-export { SecureMiddlewareOptions } from '@middleware/core';
+export {SecureMiddlewareOptions} from '@middleware/core';
 
 class NestRequestWrapper extends RequestWrapper<Request> {
-    constructor(request: Request) {
-        super(request);
-    }
-
     set method(newMethod: string) {
         this.request.method = newMethod;
     }
@@ -38,12 +34,22 @@ class NestRequestWrapper extends RequestWrapper<Request> {
     get body(): any {
         return this.request.body;
     }
-
 }
 
-class NestBuilder extends RequestHandlerBuilder<Request> {
+class NestResponseWrapper extends ResponseWrapper<Response> {
+    setHeader(key: string, value: string): void {
+        this.response.setHeader(key, value);
+    }
+
+    getHeader(key: string): string | undefined {
+        return this.response.getHeader(key)?.toString();
+    }
+}
+
+
+class NestBuilder extends RequestHandlerBuilder<Request, Response> {
     static intercept(req: Request) {
-        return new RequestHandlerBuilder(NestRequestWrapper, {}, req);
+        return new RequestHandlerBuilder(NestRequestWrapper, NestResponseWrapper, {}, req);
     }
 }
 
@@ -52,10 +58,10 @@ export function secureMiddleware(options: SecureMiddlewareOptions) {
         const originalRequest = {
             method: req.method,
             url: req.url,
-            headers: { ...req.headers },
-            body: { ...req.body },
-            query: { ...req.query },
-            params: { ...req.params },
+            headers: {...req.headers},
+            body: {...req.body},
+            query: {...req.query},
+            params: {...req.params},
         };
 
         NestBuilder.intercept(req)
