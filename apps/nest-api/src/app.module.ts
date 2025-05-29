@@ -4,6 +4,11 @@ import {AppService} from './app.service';
 import {secureMiddleware, SecureMiddlewareOptions} from '@middleware/nest';
 
 const secureMiddlewareOptions: SecureMiddlewareOptions = {
+  handlers: {
+    ProtoHandler: {enabled: true, configuration: ['example_config_value']},
+    PathTraversalHandler: {enabled: true, strict: true},
+    XSSHandler: {enabled: true, sanitizeLevel: "high"}
+  },
   logLevel: 'info',
 };
 

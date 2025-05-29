@@ -40,8 +40,6 @@ class NestBuilder extends RequestHandlerBuilder<Request> {
     }
 }
 
-
-
 export function secureMiddleware(options: SecureMiddlewareOptions) {
     return (req: Request, res: Response, next: NextFunction) => {
         const originalRequest = {
@@ -53,7 +51,7 @@ export function secureMiddleware(options: SecureMiddlewareOptions) {
             params: { ...req.params },
         };
 
-        console.log('Middleware options:', options);
+        console.log(options)
 
         NestBuilder.intercept(req)
             .then(ProtoHandler)
@@ -67,6 +65,33 @@ export function secureMiddleware(options: SecureMiddlewareOptions) {
     };
 }
 
+interface DefaultHandlerOptions {
+    enabled: boolean;
+}
+
+interface ProtoHandlerOptions extends DefaultHandlerOptions {
+    configuration: string[];
+}
+
+interface XSSHandlerOptions extends DefaultHandlerOptions{
+    sanitizeLevel?: 'low' | 'medium' | 'high';
+}
+
+interface PathTraversalHandlerOptions extends DefaultHandlerOptions{
+    strict?: boolean;
+}
+
+interface HandlerOptionsMap {
+    ProtoHandler: ProtoHandlerOptions;
+    XSSHandler: XSSHandlerOptions;
+    PathTraversalHandler: PathTraversalHandlerOptions;
+}
+
+type HandlerName = keyof HandlerOptionsMap;
+
 export interface SecureMiddlewareOptions {
+    handlers?: Partial<{
+        [key in HandlerName]: HandlerOptionsMap[key] | false; // `false` disables that handler
+    }>;
     logLevel?: 'info' | 'warn' | 'error';
 }
