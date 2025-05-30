@@ -7,54 +7,36 @@ export interface CSPHandlerOptions extends DefaultHandlerOptions {
 
 export class CSPHandler extends RequestHandler {
     static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: CSPHandlerOptions) {
+        let currentPolicy = responseWrapper.getHeader("Content-Security-Policy")
         console.log()
         console.log("================= CSP ============")
-
-        let currentPolicy = responseWrapper.getHeader("Content-Security-Policy")
         console.log("Current CSP:", currentPolicy)
 
-        // if (currentPolicy != undefined) {
-        //     throw new Error("Content Security Policy Already defined!")
-        // }
-
-        let test = {
-            "base-uri": "'none'",
-            "child-src": "'none'",
-            "connect-src": "'self'",
-            "default-src": "'self'",
-            "font-src": "'self'",
-            "form-action": "'self'",
-            "frame-ancestors": "'none'",
-            "frame-src": "'none'",
-            "img-src": "'self'",
-            "manifest-src": "'self'",
-            "media-src": "'self'",
-            "object-src": "'none'",
-            "prefetch-src": "'self'",
-            "script-src": "'self'",
-            "style-src": "'self'",
-            "worker-src": "'self'",
-        }
-
         let basePolicy: string[][] = [
-            ["default-src", "'self'"], // Sets the default allowed sources to same-origin
-            ["script-src", "'self'"], // Blocks inline scripts and external JS unless explicitly allowed
-            ["style-src", "'self'"], // Prevents loading external CSS (add 'unsafe-inline' cautiously if needed)
-            ["object-src", "'none'"], // Blocks Flash and other plugins (strongly recommended)
-            ["base-uri", "'self'"], // Prevents attackers from changing the base URL
-            ["frame-ancestors", "'none'"], // Prevents clickjacking by disallowing framing of your site
-            ["form-action", "'self'"], // Limits where forms can submit data
-            ["upgrade-insecure-requests"], // Forces HTTP resources to be loaded over HTTPS
-            ["block-all-mixed-content"], // Blocks all mixed content (HTTP on HTTPS pages)
+            ["base-uri", "'self'"],                     // Restrict <base> tag to same origin
+            ["block-all-mixed-content"],                // Block HTTP content on HTTPS pages
+            ["connect-src", "'self'"],                  // Limit fetch/XHR/WebSocket connections to same origin
+            ["default-src", "'self'"],                  // Default policy: restrict to same origin
+            ["font-src", "'self'"],                     // Restrict font loading to same origin
+            ["form-action", "'self'"],                  // Only allow form submissions to same origin
+            ["frame-ancestors", "'none'"],              // Prevent framing (clickjacking protection)
+            ["img-src", "'self' data:"],                // Restrict images to same origin or inline data URLs
+            ["manifest-src", "'self'"],                 // Restrict web app manifest to same origin
+            ["media-src", "'self'"],                    // Restrict audio and video media sources
+            ["object-src", "'none'"],                   // Disallow plugins like Flash
+            ["script-src", "'self'"],                   // Restrict scripts to same origin
+            ["style-src", "'self' 'unsafe-inline'"],    // Allow same-origin styles and inline styles (common in frameworks)
+            ["upgrade-insecure-requests"],              // Upgrade HTTP requests to HTTPS
+            ["worker-src", "'self'"],                   // Restrict where web workers or service workers can be loaded from
         ];
 
+        let finalPolicy = currentPolicy ?? "";
         // TODO CACHE THIS?
-        let finalPolicy = ""
         basePolicy.forEach((policy) => {
             if (currentPolicy?.includes(policy[0])) {
-                console.log("Policy:", policy, "is already set, ignoring it");
+                console.log("Policy:", policy[0], "is already set, ignoring it!");
             } else {
-                finalPolicy += policy.join(" ") + ";"
+                finalPolicy += " " + policy.join(" ") + ";"
             }
         })
 

@@ -9,6 +9,7 @@ const secureMiddlewareOptions: SecureMiddlewareOptions = {
     PathTraversalHandler: {enabled: true, basedir: "src", fieldsToScan: ["name"]},
     XSSHandler: {enabled: true, sanitizeLevel: "high"},
     CSPHandler: {enabled: true, some_option: true},
+    SecureHeadersHandler: {enabled: true},
   },
   logLevel: 'info',
 };

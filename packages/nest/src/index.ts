@@ -8,6 +8,7 @@ import {
 } from "@middleware/core";
 import {NextFunction, Request, Response} from 'express';
 import {CSPHandler} from "@middleware/core/dist/handlers/csp.handler";
+import {SecureHeadersHandler} from "@middleware/core/dist/handlers/secure-headers.handler";
 export {SecureMiddlewareOptions} from '@middleware/core';
 
 class NestRequestWrapper extends RequestWrapper<Request> {
@@ -56,12 +57,15 @@ class NestBuilder extends RequestHandlerBuilder<Request, Response> {
 
 export function secureMiddleware(options: SecureMiddlewareOptions) {
     return (req: Request, res: Response, next: NextFunction) => {
-        res.setHeader("Content-Security-Policy",  "script-src 'self' https://apis.google.com")
+        // For testing
+        res.setHeader("Content-Security-Policy",  "script-src 'self' https://apis.google.com;")
+        res.setHeader("X-Frame-Options", "DENY")
 
         NestBuilder.intercept(options, req, res)
             .then(ProtoHandler)
             .then(XSSHandler)
             .then(PathTraversalHandler)
+            .then(SecureHeadersHandler)
             .then(CSPHandler);
         next();
     };
