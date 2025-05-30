@@ -73,10 +73,9 @@ export class RequestHandlerBuilder<Req, Res> {
         try {
             console.log(this.options.handlers);
             const handlerOptions = this.options.handlers?.[HandlerClass.name as HandlerName];
-            if (!handlerOptions) {
-                throw new Error("Missing handler options");
+            if (handlerOptions) {
+                HandlerClass.handleRequest(this.requestWrapper, this.responseWrapper, handlerOptions);
             }
-            HandlerClass.handleRequest(this.requestWrapper, this.responseWrapper, handlerOptions);
         } catch (e) {
             console.error("Unhandled handler exception", HandlerClass.name, e);
         }

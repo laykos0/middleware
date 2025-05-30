@@ -1,4 +1,3 @@
-import {CSPHandlerOptions} from "./csp.handler";
 
 export * from './proto.handler'
 export * from './sql-inject.handler'
@@ -9,6 +8,7 @@ export * from './csp.handler'
 import {ProtoHandlerOptions} from './proto.handler'
 import {XSSHandlerOptions} from './xss.handler'
 import {PathTraversalHandlerOptions} from './path-traversal.handler'
+import {CSPHandlerOptions} from "./csp.handler";
 
 export interface DefaultHandlerOptions {
     enabled: boolean;

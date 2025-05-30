@@ -7,7 +7,8 @@ const secureMiddlewareOptions: SecureMiddlewareOptions = {
   handlers: {
     ProtoHandler: {enabled: true, enable_proto_removal: true, enable_constructor_removal: true, enable_prototype_removal: true},
     PathTraversalHandler: {enabled: true, strict: true},
-    XSSHandler: {enabled: true, sanitizeLevel: "high"}
+    XSSHandler: {enabled: true, sanitizeLevel: "high"},
+    CSPHandler: {enabled: true},
   },
   logLevel: 'info',
 };
