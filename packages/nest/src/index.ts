@@ -7,6 +7,7 @@ import {
     SecureMiddlewareOptions, ResponseWrapper
 } from "@middleware/core";
 import {NextFunction, Request, Response} from 'express';
+import {CSPHandler} from "@middleware/core/dist/handlers/csp.handler";
 export {SecureMiddlewareOptions} from '@middleware/core';
 
 class NestRequestWrapper extends RequestWrapper<Request> {
@@ -58,7 +59,8 @@ export function secureMiddleware(options: SecureMiddlewareOptions) {
         NestBuilder.intercept(options, req, res)
             .then(ProtoHandler)
             .then(XSSHandler)
-            .then(PathTraversalHandler);
+            .then(PathTraversalHandler)
+            .then(CSPHandler);
         next();
     };
 }

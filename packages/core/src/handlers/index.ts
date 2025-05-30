@@ -1,7 +1,10 @@
+import {CSPHandlerOptions} from "./csp.handler";
+
 export * from './proto.handler'
 export * from './sql-inject.handler'
 export * from './path-traversal.handler'
 export * from './xss.handler'
+export * from './csp.handler'
 
 import {ProtoHandlerOptions} from './proto.handler'
 import {XSSHandlerOptions} from './xss.handler'
@@ -15,6 +18,7 @@ interface HandlerOptionsMap {
     ProtoHandler: ProtoHandlerOptions;
     XSSHandler: XSSHandlerOptions;
     PathTraversalHandler: PathTraversalHandlerOptions;
+    CSPHandler: CSPHandlerOptions;
 }
 
 export type HandlerName = keyof HandlerOptionsMap;
