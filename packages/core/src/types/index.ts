@@ -1,4 +1,4 @@
-import {HandlerName, SecureMiddlewareOptions} from "../handlers";
+import {DefaultHandlerOptions, HandlerName, SecureMiddlewareOptions} from "../handlers";
 import {options} from "sanitize-html";
 
 export abstract class RequestWrapper<T> {
@@ -35,7 +35,7 @@ export abstract class ResponseWrapper<T> {
 
 
 export abstract class RequestHandler {
-    static handleRequest<T>(wrapper: RequestWrapper<unknown>, options: T): void {
+    static handleRequest<O extends DefaultHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: O): void {
     }
 }
 
@@ -67,12 +67,15 @@ export class RequestHandlerBuilder<Req, Res> {
         if (!this.requestWrapper) {
             throw new Error("No request to handle");
         }
+        if (!this.responseWrapper) {
+            throw new Error("No response to handle");
+        }
         try {
             const handlerOptions = this.options.handlers?.[HandlerClass.name as HandlerName];
             if (!handlerOptions) {
                 throw new Error("Missing handler options");
             }
-            HandlerClass.handleRequest(this.requestWrapper, handlerOptions);
+            HandlerClass.handleRequest(this.requestWrapper, this.responseWrapper, handlerOptions);
         } catch (e) {
             console.error("Unhandled handler exception", HandlerClass.name, e);
         }

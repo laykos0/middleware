@@ -1,4 +1,4 @@
-import {RequestHandler, RequestWrapper} from "../types";
+import {RequestHandler, RequestWrapper, ResponseWrapper} from "../types";
 import sanitizeHtml from 'sanitize-html';
 import sanitize from 'sanitize-html';
 import {DefaultHandlerOptions} from "./index";
@@ -14,7 +14,7 @@ export class XSSHandler extends RequestHandler {
         allowedAttributes: {}
     };
 
-    static handleRequest<XSSHandlerOptions>(wrapper: RequestWrapper<unknown>, options: XSSHandlerOptions) {
+    static handleRequest<O extends XSSHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: O) {
         let hasChangedRequest = false;
         console.log();
         console.log("================= XSS ============")
@@ -51,8 +51,8 @@ export class XSSHandler extends RequestHandler {
             return obj;
         };
 
-        if (wrapper.body) {
-            wrapper.body = sanitizeObject(wrapper.body);
+        if (requestWrapper.body) {
+            requestWrapper.body = sanitizeObject(requestWrapper.body);
             if (hasChangedRequest) {
                 console.log("Sanitized HTML in body");
             }

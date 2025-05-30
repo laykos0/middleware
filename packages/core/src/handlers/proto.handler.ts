@@ -1,4 +1,4 @@
-import {RequestHandler, RequestWrapper} from "../types";
+import {RequestHandler, RequestWrapper, ResponseWrapper} from "../types";
 import {DefaultHandlerOptions} from "./index";
 
 class Replacement {
@@ -13,20 +13,21 @@ const REPLACE_LIST: Replacement[] = [
     new Replacement("Prototype", /prototype/g, "REMOVED_PROTOTYPE")
 ]
 
-export interface ProtoHandlerOptions extends DefaultHandlerOptions{
+export interface ProtoHandlerOptions extends DefaultHandlerOptions {
     enable_proto_removal: boolean;
     enable_constructor_removal: boolean;
     enable_prototype_removal: boolean;
 }
 
-export class ProtoHandler extends RequestHandler {
 
-    static handleRequest<ProtoHandlerOptions>(wrapper: RequestWrapper<unknown>, options: ProtoHandlerOptions) {
+
+export class ProtoHandler extends RequestHandler {
+     static handleRequest<O extends DefaultHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: O) {
         console.log();
         console.log("================= PROTO ============")
         console.log("PROTO_OPTIONS", options)
 
-        let body = JSON.stringify(wrapper.body);
+        let body = JSON.stringify(requestWrapper.body);
 
         if (body) {
             REPLACE_LIST.forEach((replacement) => {
@@ -38,15 +39,15 @@ export class ProtoHandler extends RequestHandler {
             })
         }
 
-        wrapper.body = body;
+        requestWrapper.body = body;
 
         REPLACE_LIST.forEach((replacement) => {
-            if (replacement.regex.test(wrapper.url)) {
-                wrapper.url = wrapper.url.replace(replacement.regex, replacement.replacement);
+            if (replacement.regex.test(requestWrapper.url)) {
+                requestWrapper.url = requestWrapper.url.replace(replacement.regex, replacement.replacement);
                 console.log("Removed " + replacement.name + " in url")
             }
         })
 
-        return wrapper;
+        return;
     }
 }

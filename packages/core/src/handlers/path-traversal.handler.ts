@@ -1,4 +1,4 @@
-import {RequestHandler, RequestWrapper} from "../types";
+import {RequestHandler, RequestWrapper, ResponseWrapper} from "../types";
 import {DefaultHandlerOptions} from "./index";
 
 export interface PathTraversalHandlerOptions extends DefaultHandlerOptions {
@@ -6,14 +6,14 @@ export interface PathTraversalHandlerOptions extends DefaultHandlerOptions {
 }
 
 export class PathTraversalHandler extends RequestHandler {
-    static handleRequest<PathTraversalHandlerOptions>(wrapper: RequestWrapper<unknown>, options: PathTraversalHandlerOptions) {
+    static handleRequest<O extends PathTraversalHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: O) {
 
         console.log();
         console.log("================= PATH_TRAVERSAL ============")
         console.log("PATH_TRAVERSAL_OPTIONS", options)
 
 
-        const body = JSON.stringify(wrapper.body);
+        const body = JSON.stringify(requestWrapper.body);
         // console.log(body)
         // const targetPath = path.resolve(base, target);
         // if (!targetPath.startsWith(base + path.sep) && targetPath !== base) {
@@ -21,6 +21,6 @@ export class PathTraversalHandler extends RequestHandler {
         // }
         //     // return targetPath;
 
-        return wrapper;
+        return;
     }
 }
