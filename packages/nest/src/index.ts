@@ -56,6 +56,8 @@ class NestBuilder extends RequestHandlerBuilder<Request, Response> {
 
 export function secureMiddleware(options: SecureMiddlewareOptions) {
     return (req: Request, res: Response, next: NextFunction) => {
+        res.setHeader("Content-Security-Policy",  "script-src 'self' https://apis.google.com")
+
         NestBuilder.intercept(options, req, res)
             .then(ProtoHandler)
             .then(XSSHandler)
