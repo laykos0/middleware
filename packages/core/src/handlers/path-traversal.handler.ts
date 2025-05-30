@@ -6,7 +6,7 @@ export interface PathTraversalHandlerOptions extends DefaultHandlerOptions {
 }
 
 export class PathTraversalHandler extends RequestHandler {
-    static handleRequest<O extends PathTraversalHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: O) {
+    static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: PathTraversalHandlerOptions) {
 
         console.log();
         console.log("================= PATH_TRAVERSAL ============")

@@ -14,15 +14,13 @@ const REPLACE_LIST: Replacement[] = [
 ]
 
 export interface ProtoHandlerOptions extends DefaultHandlerOptions {
-    enable_proto_removal: boolean;
-    enable_constructor_removal: boolean;
-    enable_prototype_removal: boolean;
+    enable_proto_removal?: boolean;
+    enable_constructor_removal?: boolean;
+    enable_prototype_removal?: boolean;
 }
 
-
-
 export class ProtoHandler extends RequestHandler {
-     static handleRequest<O extends DefaultHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: O) {
+     static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: ProtoHandlerOptions) {
         console.log();
         console.log("================= PROTO ============")
         console.log("PROTO_OPTIONS", options)

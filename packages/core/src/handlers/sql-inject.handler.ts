@@ -6,7 +6,7 @@ export interface SQLInjectHandlerOptions extends DefaultHandlerOptions {
 }
 
 export class SQLInjectHandler extends RequestHandler {
-    static handleRequest<O extends SQLInjectHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: O) {
+    static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: SQLInjectHandlerOptions) {
 
         console.log();
         console.log("================= SQL INJECT ============")

@@ -5,6 +5,6 @@ export interface CSPHandlerOptions extends DefaultHandlerOptions {
 }
 
 export class CspHandler extends RequestHandler {
-    static handleRequest<O extends CSPHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: O) {
+    static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: CSPHandlerOptions) {
     }
 }
