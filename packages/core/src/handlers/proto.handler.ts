@@ -37,7 +37,7 @@ export class ProtoHandler extends RequestHandler {
             })
         }
 
-        requestWrapper.body = body;
+        requestWrapper.body = JSON.parse(body);
 
         REPLACE_LIST.forEach((replacement) => {
             if (replacement.regex.test(requestWrapper.url)) {
