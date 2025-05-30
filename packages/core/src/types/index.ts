@@ -71,7 +71,6 @@ export class RequestHandlerBuilder<Req, Res> {
             throw new Error("No response to handle");
         }
         try {
-            console.log(this.options.handlers);
             const handlerOptions = this.options.handlers?.[HandlerClass.name as HandlerName];
             if (handlerOptions) {
                 HandlerClass.handleRequest(this.requestWrapper, this.responseWrapper, handlerOptions);

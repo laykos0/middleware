@@ -18,7 +18,6 @@ export class XSSHandler extends RequestHandler {
         let hasChangedRequest = false;
         console.log();
         console.log("================= XSS ============")
-        console.log("XSS_OPTIONS", options)
 
         const sanitizeString = (input: string) => {
             const newHtml = sanitizeHtml(input, this.sanitizeOptions);

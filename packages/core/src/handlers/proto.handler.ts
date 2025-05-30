@@ -23,7 +23,6 @@ export class ProtoHandler extends RequestHandler {
      static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: ProtoHandlerOptions) {
         console.log();
         console.log("================= PROTO ============")
-        console.log("PROTO_OPTIONS", options)
 
         let body = JSON.stringify(requestWrapper.body);
 
