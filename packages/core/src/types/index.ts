@@ -1,5 +1,4 @@
 import {DefaultHandlerOptions, HandlerName, SecureMiddlewareOptions} from "../handlers";
-import {options} from "sanitize-html";
 
 export abstract class RequestWrapper<T> {
     protected request: T
@@ -17,8 +16,8 @@ export abstract class RequestWrapper<T> {
 
     // TODO ADD RESULT FUNCTIONS (detected, etc)
 
-    abstract set body(body: string)
-    abstract get body(): string | undefined
+    abstract set body(body: unknown)
+    abstract get body(): unknown | undefined
 }
 
 export abstract class ResponseWrapper<T> {

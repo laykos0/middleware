@@ -29,3 +29,19 @@ export interface SecureMiddlewareOptions {
     }>;
     logLevel?: 'info' | 'warn' | 'error';
 }
+
+export function _flatten(o: Record<string, any>, depth: number = 0, maxDepth: number = 1000): Array<Record<string, any>> {
+    if (depth > maxDepth) {
+        throw new Error("Maximum recursion depth exceeded");
+    }
+    return ([] as Array<Record<string, any>>).concat(
+        ...Object.keys(o).map((k) => {
+            const value = o[k];
+            if (value && typeof value === "object" && !Array.isArray(value)) {
+                return _flatten(value, depth + 1);
+            } else {
+                return { [k]: value };
+            }
+        })
+    );
+}
