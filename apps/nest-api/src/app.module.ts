@@ -6,12 +6,12 @@ import {secureMiddleware, SecureMiddlewareOptions} from '@middleware/nest';
 const secureMiddlewareOptions: SecureMiddlewareOptions = {
   handlers: {
     ProtoHandler: {enabled: true, enable_proto_removal: true, enable_constructor_removal: true, enable_prototype_removal: true},
-    PathTraversalHandler: {enabled: true, basedir: "src"},
+    PathTraversalHandler: {enabled: true, basedir: "./src", fieldsToReplace: ["name"]},
     XSSHandler: {enabled: true, sanitizeLevel: "high"},
     CSPHandler: {enabled: true, report_only: false, report_to: undefined},
     SecureHeadersHandler: {enabled: true},
   },
-  logLevel: 'info',
+  logLevel: 'debug',
 };
 
 

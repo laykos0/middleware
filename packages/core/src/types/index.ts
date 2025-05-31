@@ -41,6 +41,7 @@ export interface HandlerContext<O extends DefaultHandlerOptions> {
 export abstract class RequestHandler {
     static handleRequest<O extends DefaultHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<O>): void {
         if (context.options.enabled) {
+            context.logger.debug(this.name);
             this._handleRequest(requestWrapper, responseWrapper, context);
         }
     }

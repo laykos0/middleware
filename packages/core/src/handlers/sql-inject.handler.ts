@@ -11,12 +11,9 @@ export class SQLInjectHandler extends RequestHandler {
 
         const logger = context.logger;
         const options = context.options;
-
-        logger.info("================= SQL INJECT ============")
         const body = JSON.stringify(requestWrapper.body);
         logger.info(body)
 
 
-        return;
     }
 }

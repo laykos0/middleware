@@ -26,8 +26,6 @@ export class ProtoHandler extends RequestHandler {
          const logger = context.logger;
          const options = context.options;
 
-         logger.info("================= PROTO ============")
-
         let body = JSON.stringify(requestWrapper.body);
 
         if (body) {
@@ -49,6 +47,5 @@ export class ProtoHandler extends RequestHandler {
             }
         })
 
-        return;
     }
 }

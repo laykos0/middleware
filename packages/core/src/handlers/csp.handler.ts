@@ -14,7 +14,6 @@ export class CSPHandler extends RequestHandler {
         const options = context.options;
 
         let currentPolicy = responseWrapper.getHeader("Content-Security-Policy")
-        logger.info("================= CSP ============")
         logger.info("Current CSP:", currentPolicy)
 
         let basePolicy: string[][] = [

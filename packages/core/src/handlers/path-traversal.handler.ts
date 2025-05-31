@@ -1,5 +1,5 @@
 import {HandlerContext, RequestHandler, RequestWrapper, ResponseWrapper} from "../types";
-import {_flatten, DefaultHandlerOptions} from "./index";
+import {DefaultHandlerOptions} from "./index";
 import * as path from "node:path";
 
 export interface PathTraversalHandlerOptions extends DefaultHandlerOptions {
@@ -8,36 +8,73 @@ export interface PathTraversalHandlerOptions extends DefaultHandlerOptions {
 }
 
 export class PathTraversalHandler extends RequestHandler {
-    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<PathTraversalHandlerOptions>) {
-        if (!requestWrapper.body) return
+    static _handleRequest(
+        requestWrapper: RequestWrapper<unknown>,
+        responseWrapper: ResponseWrapper<unknown>,
+        context: HandlerContext<PathTraversalHandlerOptions>
+    ) {
+        if (!requestWrapper.body) return;
 
         const logger = context.logger;
         const options = context.options;
-
-        logger.info("================= PATH ============")
-
         const baseDir = options.basedir ? path.resolve(options.basedir) : process.cwd();
-        const fieldsToReplace = options.fieldsToReplace ? options.fieldsToReplace : [];
-        const flattened: Record<string, any>  = _flatten(requestWrapper.body as Record<string, any>);
-        const traversalRegex = /(\.\.[/\\])/;
+        const fieldsToReplace = new Set(options.fieldsToReplace || []);
+        const traversalRegex = /(?:^|\\|\/)(?:\.\.|%2e%2e)(?:\\|\/|$)/i;
 
-        for (const [key, value] of Object.entries(flattened)) {
-            if (typeof value === 'string') {
-                if (traversalRegex.test(value)) {
-                    if (fieldsToReplace.includes(key)) {
-                        const safeValue = path.join(baseDir, path.basename(value));
-                        logger.warn(
-                            `[WARNING] Field "${key}" contained an unsafe path (“${value}”). Replacing it with safe path (“${safeValue}”).`
+        const decodePath = (s: string): string => {
+            return s
+                .replace(/%2e/gi, '.')
+                .replace(/%2f/gi, '/')
+                .replace(/%5c/gi, '\\');
+        };
+
+        const traverse = (obj: any, currentPath: string[] = [], depth = 0, maxDepth = 1000): any => {
+            if (depth > maxDepth) {
+                throw new Error("Maximum recursion depth exceeded");
+            }
+
+            if (Array.isArray(obj)) {
+                return obj.map((item, index) => traverse(item, [...currentPath, String(index)], depth + 1))
+            }
+
+            if (obj && typeof obj === 'object') {
+                const newObj = { ...obj };
+                for (const key in newObj) {
+                    if (Object.prototype.hasOwnProperty.call(newObj, key)) {
+                        newObj[key] = traverse(
+                            newObj[key],
+                            [...currentPath, key],
+                            depth + 1
                         );
-                        flattened[key] = safeValue;
+                    }
+                }
+                return newObj;
+            }
+
+            if (typeof obj === 'string') {
+                const fullPath = currentPath.join('.');
+                const normalizedValue = decodePath(obj);
+
+                if (traversalRegex.test(normalizedValue)) {
+                    if (fieldsToReplace.has(fullPath)) {
+                        const safeValue = path.join(baseDir, path.basename(obj));
+                        logger.warn(
+                            `Field "${fullPath}" contained unsafe path ("${obj}"). ` +
+                            `Replaced with safe path ("${safeValue}").`
+                        );
+                        return safeValue;
                     } else {
                         logger.warn(
-                            `[WARNING] Potential path traversal attempt detected in field "${key}": "${value}"`
+                            `Potential path traversal detected in ` +
+                            `field "${fullPath}": "${obj}"`
                         );
                     }
                 }
             }
-        }
 
+            return obj;
+        };
+
+        requestWrapper.body = traverse(requestWrapper.body);
     }
 }
