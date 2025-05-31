@@ -15,6 +15,8 @@ export class XSSHandler extends RequestHandler {
     };
 
     static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: XSSHandlerOptions) {
+        if (!requestWrapper.body) return
+
         let hasChangedRequest = false;
         console.log();
         console.log("================= XSS ============")

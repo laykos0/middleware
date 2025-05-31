@@ -21,8 +21,10 @@ export interface ProtoHandlerOptions extends DefaultHandlerOptions {
 
 export class ProtoHandler extends RequestHandler {
      static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: ProtoHandlerOptions) {
-        console.log();
-        console.log("================= PROTO ============")
+         if (!requestWrapper.body) return
+
+         console.log();
+         console.log("================= PROTO ============")
 
         let body = JSON.stringify(requestWrapper.body);
 
