@@ -1,0 +1,25 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/express" },
+    { "path": "packages/nest" }
+  ],
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@middleware/core": ["packages/core/dist/index"],
+      "@middleware/express": ["packages/express/dist/index"],
+      "@middleware/nest": ["packages/nest/dist/index"]
+    },
+  }
+}
