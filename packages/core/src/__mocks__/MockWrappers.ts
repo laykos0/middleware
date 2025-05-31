@@ -1,28 +1,34 @@
-import { RequestWrapper, ResponseWrapper } from '../types';
+import {RequestWrapper, ResponseWrapper} from '../types';
 
-export class MockRequestWrapper extends RequestWrapper<Record<string, any>> {
-  methodValue: string = '';
-  urlValue: string = '';
-  bodyValue: unknown = undefined;
+interface MockRequestWrapperProps {
+    method?: string;
+    url?: string;
+    body?: any;
+}
 
-  set method(val: string) { this.methodValue = val; }
-  get method() { return this.methodValue; }
+export class MockRequestWrapper extends RequestWrapper<MockRequestWrapperProps> {
+    method: string;
+    url: string;
+    body: any;
 
-  set url(val: string) { this.urlValue = val; }
-  get url() { return this.urlValue; }
-
-  set body(val: unknown) { this.bodyValue = val; }
-  get body() { return this.bodyValue; }
+    constructor(
+        props: MockRequestWrapperProps
+    ) {
+        super(props);
+        this.method = props.method ?? '';
+        this.url = props.url ?? '';
+        this.body = props.body;
+    }
 }
 
 export class MockResponseWrapper extends ResponseWrapper<Record<string, any>> {
-  private headers: Record<string, string> = {};
+    private headers: Record<string, string> = {};
 
-  setHeader(key: string, value: string): void {
-    this.headers[key] = value;
-  }
+    setHeader(key: string, value: string): void {
+        this.headers[key] = value;
+    }
 
-  getHeader(key: string): string | undefined {
-    return this.headers[key];
-  }
+    getHeader(key: string): string | undefined {
+        return this.headers[key];
+    }
 }

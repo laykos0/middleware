@@ -25,7 +25,6 @@ export class XSSHandler extends RequestHandler {
 
         const sanitizeString = (input: string) => {
             const newHtml = sanitizeHtml(input, this.sanitizeOptions);
-
             // Quick check as opposed to more lengthy full check. Can give false negatives.
             if (newHtml.length != input.length) {
                 hasChangedRequest = true;
@@ -36,7 +35,7 @@ export class XSSHandler extends RequestHandler {
         // TODO CHECK RECURSIVE EXHAUSTION?
         const sanitizeObject = (obj: any): any => {
             if (typeof obj === 'string') {
-                sanitizeString(obj)
+                obj = sanitizeString(obj)
             }
 
             if (Array.isArray(obj)) {
@@ -54,12 +53,12 @@ export class XSSHandler extends RequestHandler {
             return obj;
         };
 
+
         if (requestWrapper.body) {
             requestWrapper.body = sanitizeObject(requestWrapper.body);
             if (hasChangedRequest) {
                 logger.warn("Sanitized HTML in body");
             }
         }
-
     }
 }

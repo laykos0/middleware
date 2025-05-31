@@ -1,22 +1,26 @@
-import {CSPHandler} from '../handlers';
+import {CSPHandler, CSPHandlerOptions, DefaultHandlerOptions} from '../handlers';
 import {MockRequestWrapper, MockResponseWrapper} from '../__mocks__/MockWrappers';
 import {SecureMiddlewareOptions} from '../handlers';
+import {HandlerContext} from "../types";
+import Logger from "../logger";
+import {MockLogger} from "../__mocks__/MockLogger";
 
 describe('CSPHandler', () => {
     it('adds default CSP headers if none exist', () => {
         const reqWrapper = new MockRequestWrapper({});
         const resWrapper = new MockResponseWrapper({});
 
-        const options: SecureMiddlewareOptions = {
-            handlers: {
-                CSPHandler: {
-                    enabled: true,
-                    report_only: false
-                }
-            }
+        const options: CSPHandlerOptions = {
+            enabled: true,
+            report_only: false
         };
 
-        CSPHandler.handleRequest(reqWrapper, resWrapper, options.handlers!.CSPHandler!);
+        const context: HandlerContext<CSPHandlerOptions> = {
+            options: options,
+            logger: new MockLogger('info'),
+        };
+
+        CSPHandler.handleRequest(reqWrapper, resWrapper, context);
 
         const result = resWrapper.getHeader('Content-Security-Policy');
         expect(result).toContain("default-src 'self'");
@@ -27,17 +31,19 @@ describe('CSPHandler', () => {
         const reqWrapper = new MockRequestWrapper({});
         const resWrapper = new MockResponseWrapper({});
 
-        const options: SecureMiddlewareOptions = {
-            handlers: {
-                CSPHandler: {
-                    enabled: true,
-                    report_only: true,
-                    report_to: 'https://report.example.com'
-                }
-            }
+        const options: CSPHandlerOptions = {
+            enabled: true,
+            report_only: true,
+            report_to: 'https://report.example.com'
         };
 
-        CSPHandler.handleRequest(reqWrapper, resWrapper, options.handlers!.CSPHandler!);
+        const context: HandlerContext<CSPHandlerOptions> = {
+            options: options,
+            logger: new MockLogger('info'),
+        };
+
+
+        CSPHandler.handleRequest(reqWrapper, resWrapper, context);
 
         const result = resWrapper.getHeader('Content-Security-Policy-Report-Only');
         expect(result).toContain("default-src 'self'");
@@ -48,17 +54,18 @@ describe('CSPHandler', () => {
         const reqWrapper = new MockRequestWrapper({});
         const resWrapper = new MockResponseWrapper({});
 
-        const options: SecureMiddlewareOptions = {
-            handlers: {
-                CSPHandler: {
-                    enabled: true,
-                    report_only: false,
-                    report_to: 'https://report.example.com'
-                }
-            }
+        const options: CSPHandlerOptions = {
+            enabled: true,
+            report_only: false,
+            report_to: 'https://report.example.com'
         };
 
-        CSPHandler.handleRequest(reqWrapper, resWrapper, options.handlers!.CSPHandler!);
+        const context: HandlerContext<CSPHandlerOptions> = {
+            options: options,
+            logger: new MockLogger('info'),
+        };
+
+        CSPHandler.handleRequest(reqWrapper, resWrapper, context);
 
         const reportResult = resWrapper.getHeader('Content-Security-Policy-Report-Only');
         expect(reportResult).toEqual(undefined)
@@ -70,21 +77,20 @@ describe('CSPHandler', () => {
         const reqWrapper = new MockRequestWrapper({});
         const resWrapper = new MockResponseWrapper({});
 
-        const options: SecureMiddlewareOptions = {
-            handlers: {
-                CSPHandler: {
-                    enabled: false,
-                    report_only: false,
-                    report_to: undefined
-                }
-            }
+        const options: CSPHandlerOptions = {
+            enabled: false,
+            report_only: false,
+            report_to: undefined
         };
 
-        CSPHandler.handleRequest(reqWrapper, resWrapper, options.handlers!.CSPHandler!);
+        const context: HandlerContext<CSPHandlerOptions> = {
+            options: options,
+            logger: new MockLogger('info'),
+        };
+
+        CSPHandler.handleRequest(reqWrapper, resWrapper, context);
 
         const result = resWrapper.getHeader('Content-Security-Policy');
         expect(result).toEqual(undefined)
     });
-
-
 });
