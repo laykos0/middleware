@@ -11,6 +11,7 @@ import {ProtoHandlerOptions} from './proto.handler'
 import {XSSHandlerOptions} from './xss.handler'
 import {PathTraversalHandlerOptions} from './path-traversal.handler'
 import {CSPHandlerOptions} from "./csp.handler";
+import {LogLevel} from "../logger";
 
 export interface DefaultHandlerOptions {
     enabled: boolean;
@@ -30,7 +31,7 @@ export interface SecureMiddlewareOptions {
     handlers?: Partial<{
         [key in HandlerName]: HandlerOptionsMap[key] | false;
     }>;
-    logLevel?: 'info' | 'warn' | 'error';
+    logLevel?: LogLevel;
 }
 
 export function _flatten(o: Record<string, any>, depth: number = 0, maxDepth: number = 1000): Array<Record<string, any>> {
