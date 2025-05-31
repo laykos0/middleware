@@ -2,7 +2,10 @@ import {RequestHandler, RequestWrapper, ResponseWrapper} from "../types/index";
 import {DefaultHandlerOptions, SecureMiddlewareOptions} from "./index";
 
 export interface CSPHandlerOptions extends DefaultHandlerOptions {
-    some_option?: boolean;
+    /** Change the Content-Security-Policy to Content-Security-Policy-Report-Only */
+    report_only?: boolean;
+    /** Where to report the content security policy errors. Report_only must be set for this to be applied. */
+    report_to?: string;
 }
 
 export class CSPHandler extends RequestHandler {
@@ -40,9 +43,24 @@ export class CSPHandler extends RequestHandler {
             }
         })
 
-        responseWrapper.setHeader("Content-Security-Policy", finalPolicy)
+        let policyHeader;
+        if (options.report_only) {
+            policyHeader = "Content-Security-Policy-Report-Only";
 
-        let newPolicy = responseWrapper.getHeader("Content-Security-Policy")
+            if (options.report_to) {
+                if (options.report_to.includes(policyHeader)) {
+                    console.log("report-to is already set, ignoring it!");
+                } else {
+                    finalPolicy += " report-to " + options.report_to + ""
+                }
+            }
+        } else {
+            policyHeader = "Content-Security-Policy";
+        }
+
+        responseWrapper.setHeader(policyHeader, finalPolicy)
+
+        let newPolicy = responseWrapper.getHeader(policyHeader)
         console.log("New CSP:", newPolicy)
     }
 }
