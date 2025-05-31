@@ -20,7 +20,7 @@ export interface ProtoHandlerOptions extends DefaultHandlerOptions {
 }
 
 export class ProtoHandler extends RequestHandler {
-     static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: ProtoHandlerOptions) {
+     static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: ProtoHandlerOptions) {
          if (!requestWrapper.body) return
 
          console.log();

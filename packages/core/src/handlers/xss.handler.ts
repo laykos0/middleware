@@ -14,7 +14,7 @@ export class XSSHandler extends RequestHandler {
         allowedAttributes: {}
     };
 
-    static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: XSSHandlerOptions) {
+    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: XSSHandlerOptions) {
         if (!requestWrapper.body) return
 
         let hasChangedRequest = false;

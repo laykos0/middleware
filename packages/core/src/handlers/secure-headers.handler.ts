@@ -9,7 +9,7 @@ export interface SecureHeadersHandlerOptions extends DefaultHandlerOptions {
  * Inserts some basic http headers to increase security without breakage
  **/
 export class SecureHeadersHandler extends RequestHandler {
-    static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: SecureHeadersHandlerOptions) {
+    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: SecureHeadersHandlerOptions) {
         const trySetHeader = (key: string, value: string) => {
             if (responseWrapper.getHeader(key) !== undefined) {
                 console.log("SecureHeadersHandler header", key, "already set");

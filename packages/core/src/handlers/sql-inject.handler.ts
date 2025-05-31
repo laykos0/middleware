@@ -6,7 +6,7 @@ export interface SQLInjectHandlerOptions extends DefaultHandlerOptions {
 }
 
 export class SQLInjectHandler extends RequestHandler {
-    static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: SQLInjectHandlerOptions) {
+    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: SQLInjectHandlerOptions) {
         if (!requestWrapper.body) return
 
         console.log();

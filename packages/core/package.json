@@ -4,13 +4,17 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "test": "jest"
   },
   "dependencies": {
     "@types/sanitize-html": "^2.16.0",
     "sanitize-html": "^2.16.0"
   },
   "devDependencies": {
-    "typescript": "^5.3.0"
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.4",
+    "typescript": "^5.8.3"
   }
 }

@@ -35,6 +35,12 @@ export abstract class ResponseWrapper<T> {
 
 export abstract class RequestHandler {
     static handleRequest<O extends DefaultHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: O): void {
+        if (options.enabled) {
+            this._handleRequest(requestWrapper, responseWrapper, options);
+        }
+    }
+
+    protected static _handleRequest<O extends DefaultHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: O): void {
     }
 }
 

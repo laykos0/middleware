@@ -9,7 +9,7 @@ export interface CSPHandlerOptions extends DefaultHandlerOptions {
 }
 
 export class CSPHandler extends RequestHandler {
-    static handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: CSPHandlerOptions) {
+    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: CSPHandlerOptions) {
         let currentPolicy = responseWrapper.getHeader("Content-Security-Policy")
         console.log()
         console.log("================= CSP ============")

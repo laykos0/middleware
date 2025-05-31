@@ -29,7 +29,7 @@ export type HandlerName = keyof HandlerOptionsMap;
 
 export interface SecureMiddlewareOptions {
     handlers?: Partial<{
-        [key in HandlerName]: HandlerOptionsMap[key] | false;
+        [key in HandlerName]: HandlerOptionsMap[key];
     }>;
     logLevel?: LogLevel;
 }
