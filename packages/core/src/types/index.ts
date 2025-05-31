@@ -1,4 +1,5 @@
 import {DefaultHandlerOptions, HandlerName, SecureMiddlewareOptions} from "../handlers";
+import Logger from "../logger";
 
 export abstract class RequestWrapper<T> {
     protected request: T
@@ -32,15 +33,19 @@ export abstract class ResponseWrapper<T> {
     abstract getHeader(key: string): string | undefined
 }
 
+export interface HandlerContext<O extends DefaultHandlerOptions> {
+    options: O;
+    logger: Logger;
+}
 
 export abstract class RequestHandler {
-    static handleRequest<O extends DefaultHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: O): void {
-        if (options.enabled) {
-            this._handleRequest(requestWrapper, responseWrapper, options);
+    static handleRequest<O extends DefaultHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<O>): void {
+        if (context.options.enabled) {
+            this._handleRequest(requestWrapper, responseWrapper, context);
         }
     }
 
-    protected static _handleRequest<O extends DefaultHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: O): void {
+    protected static _handleRequest<O extends DefaultHandlerOptions>(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<O>): void {
     }
 }
 
@@ -78,7 +83,11 @@ export class RequestHandlerBuilder<Req, Res> {
         try {
             const handlerOptions = this.options.handlers?.[HandlerClass.name as HandlerName];
             if (handlerOptions) {
-                HandlerClass.handleRequest(this.requestWrapper, this.responseWrapper, handlerOptions);
+                const context: HandlerContext<typeof handlerOptions> = {
+                    options: handlerOptions,
+                    logger: new Logger(this.options.logLevel ?? 'info'),
+                };
+                HandlerClass.handleRequest(this.requestWrapper, this.responseWrapper, context);
             }
         } catch (e) {
             console.error("Unhandled handler exception", HandlerClass.name, e);

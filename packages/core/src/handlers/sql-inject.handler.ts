@@ -1,4 +1,4 @@
-import {RequestHandler, RequestWrapper, ResponseWrapper} from "../types";
+import {HandlerContext, RequestHandler, RequestWrapper, ResponseWrapper} from "../types";
 import {DefaultHandlerOptions} from "./index";
 
 export interface SQLInjectHandlerOptions extends DefaultHandlerOptions {
@@ -6,13 +6,15 @@ export interface SQLInjectHandlerOptions extends DefaultHandlerOptions {
 }
 
 export class SQLInjectHandler extends RequestHandler {
-    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: SQLInjectHandlerOptions) {
+    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<SQLInjectHandlerOptions>) {
         if (!requestWrapper.body) return
 
-        console.log();
-        console.log("================= SQL INJECT ============")
+        const logger = context.logger;
+        const options = context.options;
+
+        logger.info("================= SQL INJECT ============")
         const body = JSON.stringify(requestWrapper.body);
-        console.log(body)
+        logger.info(body)
 
 
         return;

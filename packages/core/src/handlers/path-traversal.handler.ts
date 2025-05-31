@@ -1,4 +1,4 @@
-import {RequestHandler, RequestWrapper, ResponseWrapper} from "../types";
+import {HandlerContext, RequestHandler, RequestWrapper, ResponseWrapper} from "../types";
 import {_flatten, DefaultHandlerOptions} from "./index";
 import * as path from "node:path";
 
@@ -8,11 +8,13 @@ export interface PathTraversalHandlerOptions extends DefaultHandlerOptions {
 }
 
 export class PathTraversalHandler extends RequestHandler {
-    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: PathTraversalHandlerOptions) {
+    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<PathTraversalHandlerOptions>) {
         if (!requestWrapper.body) return
 
-        console.log()
-        console.log("================= PATH ============")
+        const logger = context.logger;
+        const options = context.options;
+
+        logger.info("================= PATH ============")
 
         const baseDir = options.basedir ? path.resolve(options.basedir) : process.cwd();
         const fieldsToReplace = options.fieldsToReplace ? options.fieldsToReplace : [];
@@ -24,12 +26,12 @@ export class PathTraversalHandler extends RequestHandler {
                 if (traversalRegex.test(value)) {
                     if (fieldsToReplace.includes(key)) {
                         const safeValue = path.join(baseDir, path.basename(value));
-                        console.warn(
+                        logger.warn(
                             `[WARNING] Field "${key}" contained an unsafe path (“${value}”). Replacing it with safe path (“${safeValue}”).`
                         );
                         flattened[key] = safeValue;
                     } else {
-                        console.warn(
+                        logger.warn(
                             `[WARNING] Potential path traversal attempt detected in field "${key}": "${value}"`
                         );
                     }

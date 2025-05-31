@@ -1,5 +1,5 @@
-import {RequestHandler, RequestWrapper, ResponseWrapper} from "../types/index";
-import {DefaultHandlerOptions, SecureMiddlewareOptions} from "./index";
+import {HandlerContext, RequestHandler, RequestWrapper, ResponseWrapper} from "../types/index";
+import {DefaultHandlerOptions} from "./index";
 
 export interface SecureHeadersHandlerOptions extends DefaultHandlerOptions {
 
@@ -9,15 +9,19 @@ export interface SecureHeadersHandlerOptions extends DefaultHandlerOptions {
  * Inserts some basic http headers to increase security without breakage
  **/
 export class SecureHeadersHandler extends RequestHandler {
-    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: SecureHeadersHandlerOptions) {
+    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<SecureHeadersHandlerOptions>) {
+
+        const logger = context.logger;
+        const options = context.options;
+
         const trySetHeader = (key: string, value: string) => {
             if (responseWrapper.getHeader(key) !== undefined) {
-                console.log("SecureHeadersHandler header", key, "already set");
+                logger.info("SecureHeadersHandler header", key, "already set");
             } else {
                 responseWrapper.setHeader(key, value);
             }
         }
-        console.log("================= SECURE_HEADERS ============")
+        logger.info("================= SECURE_HEADERS ============")
         trySetHeader("X-Content-Type-Options", "nosniff") // Prevents MIME-sniffing, reducing XSS risk.
         trySetHeader("Referrer-Policy", "no-referrer-when-downgrade") // Sends the full Referer header only when navigating from HTTPS to another HTTPS page.
         trySetHeader("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload") //  Forces browsers to always use HTTPS, preventing SSL stripping attacks.

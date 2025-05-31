@@ -1,5 +1,5 @@
-import {RequestHandler, RequestWrapper, ResponseWrapper} from "../types/index";
-import {DefaultHandlerOptions, SecureMiddlewareOptions} from "./index";
+import {HandlerContext, RequestHandler, RequestWrapper, ResponseWrapper} from "../types/index";
+import {DefaultHandlerOptions} from "./index";
 
 export interface CSPHandlerOptions extends DefaultHandlerOptions {
     /** Change the Content-Security-Policy to Content-Security-Policy-Report-Only */
@@ -9,11 +9,13 @@ export interface CSPHandlerOptions extends DefaultHandlerOptions {
 }
 
 export class CSPHandler extends RequestHandler {
-    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, options: CSPHandlerOptions) {
+    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<CSPHandlerOptions>) {
+        const logger = context.logger;
+        const options = context.options;
+
         let currentPolicy = responseWrapper.getHeader("Content-Security-Policy")
-        console.log()
-        console.log("================= CSP ============")
-        console.log("Current CSP:", currentPolicy)
+        logger.info("================= CSP ============")
+        logger.info("Current CSP:", currentPolicy)
 
         let basePolicy: string[][] = [
             ["base-uri", "'self'"],                     // Restrict <base> tag to same origin
@@ -37,7 +39,7 @@ export class CSPHandler extends RequestHandler {
         // TODO CACHE THIS?
         basePolicy.forEach((policy) => {
             if (currentPolicy?.includes(policy[0])) {
-                console.log("Policy:", policy[0], "is already set, ignoring it!");
+                logger.info("Policy:", policy[0], "is already set, ignoring it!");
             } else {
                 finalPolicy += " " + policy.join(" ") + ";"
             }
@@ -49,7 +51,7 @@ export class CSPHandler extends RequestHandler {
 
             if (options.report_to) {
                 if (options.report_to.includes(policyHeader)) {
-                    console.log("report-to is already set, ignoring it!");
+                    logger.info("report-to is already set, ignoring it!");
                 } else {
                     finalPolicy += " report-to " + options.report_to + ""
                 }
@@ -61,6 +63,6 @@ export class CSPHandler extends RequestHandler {
         responseWrapper.setHeader(policyHeader, finalPolicy)
 
         let newPolicy = responseWrapper.getHeader(policyHeader)
-        console.log("New CSP:", newPolicy)
+        logger.info("New CSP:", newPolicy)
     }
 }

@@ -1,26 +1,38 @@
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
-
-const colors: Record<LogLevel, string> = {
+const RESET = '\x1b[0m';
+const COLORS: Record<LogLevel, string> = {
     debug: '\x1b[36m',
     info: '\x1b[32m',
     warn: '\x1b[33m',
     error: '\x1b[31m',
 };
 
-const reset = '\x1b[0m';
+class Logger {
+    private static logLevelOrder: Record<LogLevel, number> = {
+        debug: 0,
+        info: 1,
+        warn: 2,
+        error: 3,
+    };
 
-const Logger: Record<LogLevel, (...args: any[]) => void> = {
-    debug: (...args) => log('debug', ...args),
-    info: (...args) => log('info', ...args),
-    warn: (...args) => log('warn', ...args),
-    error: (...args) => log('error', ...args),
-};
+    constructor(private currentLogLevel: LogLevel = 'info') {}
 
-function log(level: LogLevel, ...args: any[]) {
-    const timestamp = new Date().toISOString();
-    const color = colors[level];
-    const tag = `[${level.toUpperCase()}]`;
-    console.log(`${color}[${timestamp}] ${tag}${reset}`, ...args);
+    private shouldLog(level: LogLevel): boolean {
+        return Logger.logLevelOrder[level] >= Logger.logLevelOrder[this.currentLogLevel];
+    }
+
+    log(level: LogLevel, ...args: any[]) {
+        if (!this.shouldLog(level)) return;
+        const timestamp = new Date().toISOString();
+        const color = COLORS[level];
+        const tag = `[${level.toUpperCase()}]`;
+        console.log(`${color}[${timestamp}] ${tag}${RESET}`, ...args);
+    }
+
+    debug(...args: any[]) { this.log('debug', ...args); }
+    info(...args: any[]) { this.log('info', ...args); }
+    warn(...args: any[]) { this.log('warn', ...args); }
+    error(...args: any[]) { this.log('error', ...args); }
 }
 
 export default Logger;
