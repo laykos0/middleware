@@ -59,10 +59,6 @@ class ExpressBuilder extends HandlerBuilder<Request, Response> {
 
 export function secureMiddleware(options: SecureMiddlewareOptions) {
     return (req: Request, res: Response, next: NextFunction) => {
-        // For testing
-        res.setHeader("Content-Security-Policy",  "script-src 'self' https://apis.google.com;")
-        res.setHeader("X-Frame-Options", "DENY")
-
         ExpressBuilder.intercept(options, req, res)
             .then(ProtoHandler)
             .then(XSSHandler)
