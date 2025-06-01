@@ -11,10 +11,9 @@ export class SecureHeadersHandler extends Handler {
     static _handle(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<SecureHeadersHandlerOptions>) {
 
         const logger = context.logger;
-        const options = context.options;
 
         const trySetHeader = (key: string, value: string) => {
-            if (responseWrapper.getHeader(key) !== undefined) {
+            if (responseWrapper.getHeader(key)) {
                 logger.info("SecureHeadersHandler header", key, "already set");
             } else {
                 responseWrapper.setHeader(key, value);

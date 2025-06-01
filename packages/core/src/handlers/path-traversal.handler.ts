@@ -12,6 +12,7 @@ export class PathTraversalHandler extends Handler {
         responseWrapper: ResponseWrapper<unknown>,
         context: HandlerContext<PathTraversalHandlerOptions>
     ) {
+        // TODO ALSO CHECK URL?
         if (!requestWrapper.body) return;
 
         const logger = context.logger;

@@ -22,8 +22,17 @@ export class MockRequestWrapper extends RequestWrapper<MockRequestWrapperProps> 
     }
 }
 
-export class MockResponseWrapper extends ResponseWrapper<Record<string, any>> {
-    private headers: Record<string, string> = {};
+interface MockResponseWrapperProps {
+    headers?: Record<string, string>;
+}
+
+export class MockResponseWrapper extends ResponseWrapper<MockResponseWrapperProps> {
+    headers: Record<string, string>;
+
+    constructor(props: MockResponseWrapperProps) {
+        super(props);
+        this.headers = props.headers ?? {};
+    }
 
     setHeader(key: string, value: string): void {
         this.headers[key] = value;
