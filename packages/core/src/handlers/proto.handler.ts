@@ -1,5 +1,4 @@
-import {HandlerContext, RequestHandler, RequestWrapper, ResponseWrapper} from "../types";
-import {DefaultHandlerOptions} from "./index";
+import {DefaultHandlerOptions, Handler, HandlerContext, RequestWrapper, ResponseWrapper} from "../";
 
 class Replacement {
     constructor(public name: string, public regex: RegExp, public replacement: string) {
@@ -19,8 +18,8 @@ export interface ProtoHandlerOptions extends DefaultHandlerOptions {
     enable_prototype_removal?: boolean;
 }
 
-export class ProtoHandler extends RequestHandler {
-     static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<ProtoHandlerOptions>) {
+export class ProtoHandler extends Handler {
+     static _handle(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<ProtoHandlerOptions>) {
          if (!requestWrapper.body) return
 
          const logger = context.logger;

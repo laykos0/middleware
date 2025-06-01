@@ -1,5 +1,5 @@
-import {HandlerContext, RequestHandler, RequestWrapper, ResponseWrapper} from "../types/index";
-import {DefaultHandlerOptions} from "./index";
+import {DefaultHandlerOptions, Handler, HandlerContext, RequestWrapper, ResponseWrapper} from "../";
+
 
 export interface CSPHandlerOptions extends DefaultHandlerOptions {
     /** Change the Content-Security-Policy to Content-Security-Policy-Report-Only */
@@ -8,8 +8,8 @@ export interface CSPHandlerOptions extends DefaultHandlerOptions {
     report_to?: string;
 }
 
-export class CSPHandler extends RequestHandler {
-    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<CSPHandlerOptions>) {
+export class CSPHandler extends Handler {
+    static _handle(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<CSPHandlerOptions>) {
         const logger = context.logger;
         const options = context.options;
 

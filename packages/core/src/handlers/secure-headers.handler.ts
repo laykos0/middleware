@@ -1,5 +1,4 @@
-import {HandlerContext, RequestHandler, RequestWrapper, ResponseWrapper} from "../types/index";
-import {DefaultHandlerOptions} from "./index";
+import {DefaultHandlerOptions, Handler, HandlerContext, RequestWrapper, ResponseWrapper} from "../";
 
 export interface SecureHeadersHandlerOptions extends DefaultHandlerOptions {
 
@@ -8,8 +7,8 @@ export interface SecureHeadersHandlerOptions extends DefaultHandlerOptions {
 /**
  * Inserts some basic http headers to increase security without breakage
  **/
-export class SecureHeadersHandler extends RequestHandler {
-    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<SecureHeadersHandlerOptions>) {
+export class SecureHeadersHandler extends Handler {
+    static _handle(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<SecureHeadersHandlerOptions>) {
 
         const logger = context.logger;
         const options = context.options;

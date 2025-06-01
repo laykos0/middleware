@@ -14,12 +14,12 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
-    "declarationMap": true,
+    "emitDeclarationOnly": false,
     "baseUrl": ".",
     "paths": {
-      "@middleware/core": ["packages/core/dist/index"],
-      "@middleware/express": ["packages/express/dist/index"],
-      "@middleware/nest": ["packages/nest/dist/index"]
-    },
+      "@middleware/core": ["packages/core/dist"],
+      "@middleware/express": ["packages/express/dist"],
+      "@middleware/nest": ["packages/nest/dist"]
+    }
   }
 }

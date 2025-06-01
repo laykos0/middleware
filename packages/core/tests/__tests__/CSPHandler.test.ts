@@ -1,9 +1,6 @@
-import {CSPHandler, CSPHandlerOptions, DefaultHandlerOptions} from '../handlers';
 import {MockRequestWrapper, MockResponseWrapper} from '../__mocks__/MockWrappers';
-import {SecureMiddlewareOptions} from '../handlers';
-import {HandlerContext} from "../types";
-import Logger from "../logger";
 import {MockLogger} from "../__mocks__/MockLogger";
+import {CSPHandler, CSPHandlerOptions, HandlerContext} from "../../src";
 
 describe('CSPHandler', () => {
     it('adds default CSP headers if none exist', () => {
@@ -20,7 +17,7 @@ describe('CSPHandler', () => {
             logger: new MockLogger('info'),
         };
 
-        CSPHandler.handleRequest(reqWrapper, resWrapper, context);
+        CSPHandler.handle(reqWrapper, resWrapper, context);
 
         const result = resWrapper.getHeader('Content-Security-Policy');
         expect(result).toContain("default-src 'self'");
@@ -43,7 +40,7 @@ describe('CSPHandler', () => {
         };
 
 
-        CSPHandler.handleRequest(reqWrapper, resWrapper, context);
+        CSPHandler.handle(reqWrapper, resWrapper, context);
 
         const result = resWrapper.getHeader('Content-Security-Policy-Report-Only');
         expect(result).toContain("default-src 'self'");
@@ -65,7 +62,7 @@ describe('CSPHandler', () => {
             logger: new MockLogger('info'),
         };
 
-        CSPHandler.handleRequest(reqWrapper, resWrapper, context);
+        CSPHandler.handle(reqWrapper, resWrapper, context);
 
         const reportResult = resWrapper.getHeader('Content-Security-Policy-Report-Only');
         expect(reportResult).toEqual(undefined)
@@ -88,7 +85,7 @@ describe('CSPHandler', () => {
             logger: new MockLogger('info'),
         };
 
-        CSPHandler.handleRequest(reqWrapper, resWrapper, context);
+        CSPHandler.handle(reqWrapper, resWrapper, context);
 
         const result = resWrapper.getHeader('Content-Security-Policy');
         expect(result).toEqual(undefined)

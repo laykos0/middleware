@@ -7,10 +7,14 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@middleware/core": "file:../core",
-    "express": "^1.0.0"
+    "@middleware/core": "file:../core"
+  },
+  "peerDependencies": {
+    "express": "^5.1.0"
   },
   "devDependencies": {
-    "@types/express": "^5.0.1"
+    "@types/express": "^5.0.2",
+    "typescript": "^5.8.3",
+    "express": "^5.1.0"
   }
 }

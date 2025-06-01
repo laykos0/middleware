@@ -1,4 +1,3 @@
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 const RESET = '\x1b[0m';
 const COLORS: Record<LogLevel, string> = {
     debug: '\x1b[36m',
@@ -7,7 +6,8 @@ const COLORS: Record<LogLevel, string> = {
     error: '\x1b[31m',
 };
 
-class Logger {
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+export class Logger {
     private static logLevelOrder: Record<LogLevel, number> = {
         debug: 0,
         info: 1,
@@ -34,5 +34,3 @@ class Logger {
     warn(...args: any[]) { this.log('warn', ...args); }
     error(...args: any[]) { this.log('error', ...args); }
 }
-
-export default Logger;

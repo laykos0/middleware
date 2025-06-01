@@ -1,4 +1,4 @@
-import Logger, {LogLevel} from "../logger";
+import {Logger, LogLevel} from "../../src";
 
 export class MockLogger extends Logger {
     log(level: LogLevel, ...args: any[]) {}

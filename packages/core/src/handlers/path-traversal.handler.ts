@@ -1,5 +1,4 @@
-import {HandlerContext, RequestHandler, RequestWrapper, ResponseWrapper} from "../types";
-import {DefaultHandlerOptions} from "./index";
+import {DefaultHandlerOptions, Handler, HandlerContext, RequestWrapper, ResponseWrapper} from "../";
 import * as path from "node:path";
 
 export interface PathTraversalHandlerOptions extends DefaultHandlerOptions {
@@ -7,8 +6,8 @@ export interface PathTraversalHandlerOptions extends DefaultHandlerOptions {
     fieldsToReplace?: string[];
 }
 
-export class PathTraversalHandler extends RequestHandler {
-    static _handleRequest(
+export class PathTraversalHandler extends Handler {
+    static _handle(
         requestWrapper: RequestWrapper<unknown>,
         responseWrapper: ResponseWrapper<unknown>,
         context: HandlerContext<PathTraversalHandlerOptions>
@@ -54,19 +53,16 @@ export class PathTraversalHandler extends RequestHandler {
             if (typeof obj === 'string') {
                 const fullPath = currentPath.join('.');
                 const normalizedValue = decodePath(obj);
-
                 if (traversalRegex.test(normalizedValue)) {
                     if (fieldsToReplace.has(fullPath)) {
                         const safeValue = path.join(baseDir, path.basename(obj));
                         logger.warn(
-                            `Field "${fullPath}" contained unsafe path ("${obj}"). ` +
-                            `Replaced with safe path ("${safeValue}").`
+                            `Field "${fullPath}" contained unsafe path ("${obj}"). ` + `Replaced with safe path ("${safeValue}").`
                         );
                         return safeValue;
                     } else {
                         logger.warn(
-                            `Potential path traversal detected in ` +
-                            `field "${fullPath}": "${obj}"`
+                            `Potential path traversal detected in ` + `field "${fullPath}": "${obj}"`
                         );
                     }
                 }

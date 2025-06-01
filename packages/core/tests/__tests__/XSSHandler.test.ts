@@ -1,6 +1,5 @@
-import {XSSHandler, XSSHandlerOptions} from '../handlers';
+import {HandlerContext, XSSHandler, XSSHandlerOptions} from '../../src';
 import {MockRequestWrapper, MockResponseWrapper} from '../__mocks__/MockWrappers';
-import {HandlerContext} from "../types";
 import {MockLogger} from "../__mocks__/MockLogger";
 
 describe('XSSHandler', () => {
@@ -19,7 +18,7 @@ describe('XSSHandler', () => {
             logger: new MockLogger('info'),
         };
 
-        XSSHandler.handleRequest(reqWrapper, resWrapper, context);
+        XSSHandler.handle(reqWrapper, resWrapper, context);
         expect(reqWrapper.body).toBe(""); // All tags removed
     });
 
@@ -38,7 +37,7 @@ describe('XSSHandler', () => {
             logger: new MockLogger('info'),
         };
 
-        XSSHandler.handleRequest(reqWrapper, resWrapper, context);
+        XSSHandler.handle(reqWrapper, resWrapper, context);
         expect(reqWrapper.body).toBe(maliciousInput);
     });
 
@@ -66,7 +65,7 @@ describe('XSSHandler', () => {
             logger: new MockLogger('info'),
         };
 
-        XSSHandler.handleRequest(reqWrapper, resWrapper, context);
+        XSSHandler.handle(reqWrapper, resWrapper, context);
 
         const sanitizedBody = reqWrapper.body as {
             safe: string;
@@ -96,7 +95,7 @@ describe('XSSHandler', () => {
             options: options,
             logger: new MockLogger('info'),
         };
-        XSSHandler.handleRequest(reqWrapper, resWrapper, context);
+        XSSHandler.handle(reqWrapper, resWrapper, context);
 
         const body = reqWrapper.body as {
             number: number,
@@ -122,7 +121,7 @@ describe('XSSHandler', () => {
         };
 
         expect(() => {
-            XSSHandler.handleRequest(reqWrapper, resWrapper, context);
+            XSSHandler.handle(reqWrapper, resWrapper, context);
         }).not.toThrow();
     });
 });

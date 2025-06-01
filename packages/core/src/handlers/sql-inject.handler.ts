@@ -1,12 +1,12 @@
-import {HandlerContext, RequestHandler, RequestWrapper, ResponseWrapper} from "../types";
-import {DefaultHandlerOptions} from "./index";
+import {DefaultHandlerOptions, Handler, HandlerContext, RequestWrapper, ResponseWrapper} from "../";
+
 
 export interface SQLInjectHandlerOptions extends DefaultHandlerOptions {
     pattern?: string;
 }
 
-export class SQLInjectHandler extends RequestHandler {
-    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<SQLInjectHandlerOptions>) {
+export class SQLInjectHandler extends Handler {
+    static _handle(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<SQLInjectHandlerOptions>) {
         if (!requestWrapper.body) return
 
         const logger = context.logger;

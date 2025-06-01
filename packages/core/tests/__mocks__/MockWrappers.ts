@@ -1,4 +1,5 @@
-import {RequestWrapper, ResponseWrapper} from '../types';
+import {RequestWrapper, ResponseWrapper} from "../../src";
+
 
 interface MockRequestWrapperProps {
     method?: string;

@@ -1,4 +1,4 @@
-# Middleware
+# Secure Middleware
 
 A collection of middleware packages for threat detection in different web frameworks.
 
@@ -22,10 +22,15 @@ Install all dependencies from the root directory:
 npm install
 ```
 
-Start dynamic builds (watch mode) for all packages, which automatically rebuild on file changes:
-
+Start dynamic builds (watch mode) for all packages.
 ```bash
-npm run watch:all
+tsc -b -w
+```
+
+## Troubleshooting
+If you encounter build issues, try cleaning the build cache.
+```bash
+tsc -b --clean
 ```
 
 ## Running the Example API

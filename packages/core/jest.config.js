@@ -7,6 +7,7 @@ module.exports = {
   testEnvironment: "node",
   preset: 'ts-jest',
   modulePathIgnorePatterns: ["<rootDir>/dist/"],
+  testMatch: ["<rootDir>/tests/**/*.test.ts", "<rootDir>/tests/**/*.spec.ts"],
   transform: {
     ...tsJestTransformCfg,
   },

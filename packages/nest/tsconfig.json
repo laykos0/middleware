@@ -4,7 +4,10 @@
     "composite": true,
     "outDir": "dist",
     "rootDir": "src",
-    "declaration": true
   },
+  "references": [
+    { "path": "../core" },
+    { "path": "../express" }
+  ],
   "include": ["src/**/*"]
 }

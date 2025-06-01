@@ -1,20 +1,20 @@
-import {HandlerContext, RequestHandler, RequestWrapper, ResponseWrapper} from "../types";
 import sanitizeHtml from 'sanitize-html';
 import sanitize from 'sanitize-html';
-import {DefaultHandlerOptions} from "./index";
+import {DefaultHandlerOptions, Handler, HandlerContext, RequestWrapper, ResponseWrapper} from "../";
+
 
 export interface XSSHandlerOptions extends DefaultHandlerOptions {
     sanitizeLevel?: 'low' | 'medium' | 'high';
 }
 
-export class XSSHandler extends RequestHandler {
+export class XSSHandler extends Handler {
     private static sanitizeOptions: sanitize.IOptions = {
         // TODO MAKE THIS CONFIGURABLE
         allowedTags: [], // remove all HTML
         allowedAttributes: {}
     };
 
-    static _handleRequest(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<XSSHandlerOptions>) {
+    static _handle(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<XSSHandlerOptions>) {
         if (!requestWrapper.body) return
 
         const logger = context.logger;
