@@ -27,5 +27,4 @@ jobs:
         run: npm run build
 
       - name: Run Tests (Core)
-        working-directory: packages/core
         run: npm test

@@ -101,4 +101,34 @@ describe('ProtoHandler', () => {
         expect(body.message).toBe("hello world");
         expect(reqWrapper.url).toBe("/api/clean");
     });
+    it('changes nothing if all replacements are disabled', () => {
+        const reqWrapper = new MockRequestWrapper({
+            body: {
+                data: "__proto__ constructor prototype __pr__proto__oto__ __prototypeproto__"
+            },
+            url: "/api/test"
+        });
+        const resWrapper = new MockResponseWrapper({});
+
+        const options: ProtoHandlerOptions = {
+            enabled: true,
+            enable_proto_removal: false,
+            enable_constructor_removal: false,
+            enable_prototype_removal: false,
+        };
+
+        const context: HandlerContext<ProtoHandlerOptions> = {
+            options,
+            logger: new MockLogger('info'),
+        };
+
+        ProtoHandler.handle(reqWrapper, resWrapper, context);
+
+        const body = reqWrapper.body as { data: string };
+        expect(body.data).toContain("__proto__");
+        expect(body.data).toContain("constructor");
+        expect(body.data).toContain("prototype");
+    });
+
+
 });

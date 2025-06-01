@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "test": "jest",
     "build": "npm run build:core && npm run build:express && npm run build:nest",
     "build:core": "cd packages/core && npm run build",
     "build:express": "cd packages/express && npm run build",
@@ -24,7 +25,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "concurrently": "^9.1.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.4",
     "typescript": "^5.8.3"
   }
 }
