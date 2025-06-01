@@ -26,5 +26,5 @@ jobs:
       - name: Build All Packages
         run: npm run build
 
-      - name: Run Tests (Core)
+      - name: Run Tests
         run: npm test
