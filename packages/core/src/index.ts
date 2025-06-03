@@ -1,6 +1,9 @@
 // SEC: LOGGER
 export * from "./logger/logger";
 
+// SEC: DEFAULTS
+export * from "./defaults/options.default"
+
 // SEC: BUILDERS
 export * from "./builders/handler.builder"
 

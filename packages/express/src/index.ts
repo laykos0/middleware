@@ -8,9 +8,11 @@ import {
     SecureHeadersHandler,
     SecureMiddlewareOptions,
     XSSHandler,
+    SECURE_MIDDLEWARE_DEFAULT_OPTIONS
 } from "@middleware/core";
 import {NextFunction, Request, Response} from 'express';
 
+export { SECURE_MIDDLEWARE_DEFAULT_OPTIONS } from '@middleware/core'
 export type { SecureMiddlewareOptions } from '@middleware/core';
 
 class ExpressRequestWrapper extends RequestWrapper<Request> {
@@ -57,7 +59,7 @@ class ExpressBuilder extends HandlerBuilder<Request, Response> {
     }
 }
 
-export function secureMiddleware(options: SecureMiddlewareOptions) {
+export function secureMiddleware(options: SecureMiddlewareOptions = SECURE_MIDDLEWARE_DEFAULT_OPTIONS) {
     return (req: Request, res: Response, next: NextFunction) => {
         ExpressBuilder.intercept(options, req, res)
             .then(ProtoHandler)

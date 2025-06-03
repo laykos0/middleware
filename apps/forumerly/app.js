@@ -34,24 +34,13 @@ var bots = ["googlebot","spider","bingbot","yandexbot","ahrefsbot","msnbot","lin
 // Global partials values for the view engine (to avoid having to define the path for each request)
 app.locals.partials = {navbar: 'partials/navbar', footer: 'partials/footer', head: 'partials/head', park: 'partials/park'}
 
-const secureMiddlewareOptions = {
-  handlers: {
-    ProtoHandler: {enabled: true, enable_proto_removal: true, enable_constructor_removal: true, enable_prototype_removal: true},
-    PathTraversalHandler: {enabled: true, fieldsToReplace: ["username"]},
-    XSSHandler: {enabled: true, sanitizeLevel: "high"},
-    CSPHandler: {enabled: true, report_only: false, report_to: undefined},
-    SecureHeadersHandler: {enabled: true},
-  },
-  logLevel: 'debug',
-};
-
 // App setup
 app
   .set('view engine', 'hjs')
   .use(express.static(__dirname + '/public'))
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({extended: false}))
-  .use(expressMiddleware.secureMiddleware(secureMiddlewareOptions))
+  .use(expressMiddleware.secureMiddleware())
 
   // Sessions and passport setup
   .use(session({

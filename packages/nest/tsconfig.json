@@ -4,6 +4,8 @@
     "composite": true,
     "outDir": "dist",
     "rootDir": "src",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "references": [
     { "path": "../core" },
