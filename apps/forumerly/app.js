@@ -37,7 +37,7 @@ app.locals.partials = {navbar: 'partials/navbar', footer: 'partials/footer', hea
 const secureMiddlewareOptions = {
   handlers: {
     ProtoHandler: {enabled: true, enable_proto_removal: true, enable_constructor_removal: true, enable_prototype_removal: true},
-    PathTraversalHandler: {enabled: true, basedir: "./", fieldsToReplace: ["username"]},
+    PathTraversalHandler: {enabled: true, fieldsToReplace: ["username"]},
     XSSHandler: {enabled: true, sanitizeLevel: "high"},
     CSPHandler: {enabled: true, report_only: false, report_to: undefined},
     SecureHeadersHandler: {enabled: true},

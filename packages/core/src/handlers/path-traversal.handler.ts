@@ -17,7 +17,6 @@ export class PathTraversalHandler extends Handler {
 
         const logger = context.logger;
         const options = context.options;
-        const baseDir = options.basedir ? path.resolve(options.basedir) : process.cwd();
         const fieldsToReplace = new Set(options.fieldsToReplace || []);
         const traversalRegex = /(?:^|\\|\/)(?:\.\.|%2e%2e)(?:\\|\/|$)/i;
 
@@ -56,11 +55,14 @@ export class PathTraversalHandler extends Handler {
                 const normalizedValue = decodePath(obj);
                 if (traversalRegex.test(normalizedValue)) {
                     if (fieldsToReplace.has(fullPath)) {
-                        const safeValue = path.join(baseDir, path.basename(obj));
+                        const cleanedPath = path
+                            .normalize(normalizedValue)
+                            .replace(/^(\.\.(\/|\\|$))+/, '')
+                            .replace(/\\/g, '/');
                         logger.warn(
-                            `Field "${fullPath}" contained unsafe path ("${obj}"). ` + `Replaced with safe path ("${safeValue}").`
+                            `Field "${fullPath}" contained unsafe path ("${obj}"). ` + `Replaced with safe path ("${cleanedPath}").`
                         );
-                        return safeValue;
+                        return cleanedPath;
                     } else {
                         logger.warn(
                             `Potential path traversal detected in ` + `field "${fullPath}": "${obj}"`
