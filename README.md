@@ -7,11 +7,14 @@ A collection of middleware packages for threat detection in different web framew
 ```
 middleware/
 ├── packages/
-│   ├── core/       # Core middleware functionality
-│   ├── express/    # Express middleware wrapper
-│   └── nest/       # NestJS middleware wrapper
+│   ├── core/            # Generic core
+│   ├── express/         # Express.js wrapper
+│   ├── nest/            # NestJS wrapper
+│   └── koa/             # Koa wrapper
 └── apps/
-    └── nest-api/   # Example NestJS application
+    ├── nest-api/        # Example NestJS app
+    ├── koa-api/         # Example Koa app
+    └── forumerly/       # Example vulnerable Express app
 ```
 
 ## Installation
@@ -49,5 +52,6 @@ Import and use the middleware in your application based on your framework:
 
 - For NestJS: `@middleware/nest`
 - For Express: `@middleware/express`
+- For Koa: `@middleware/koa`
 
 Refer to each package's documentation for detailed implementation instructions.
