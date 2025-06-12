@@ -1,5 +1,4 @@
 import {DefaultHandlerOptions, Handler, HandlerContext, RequestWrapper, ResponseWrapper} from "../";
-import {options} from "sanitize-html";
 
 class Replacement {
     constructor(public name: string, public regex: RegExp, public replacement: string) {
