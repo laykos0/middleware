@@ -19,8 +19,6 @@ export interface ProtoHandlerOptions extends DefaultHandlerOptions {
 
 export class ProtoHandler extends Handler {
     static _handle(requestWrapper: RequestWrapper<unknown>, responseWrapper: ResponseWrapper<unknown>, context: HandlerContext<ProtoHandlerOptions>) {
-        if (!requestWrapper.body) return
-
         let REPLACE_LIST: Replacement[] = [];
 
         if (context.options.enable_proto_removal) {
@@ -45,9 +43,8 @@ export class ProtoHandler extends Handler {
                     logger.warn("Removed " + replacement.name + " in body")
                 }
             })
+            requestWrapper.body = JSON.parse(body);
         }
-
-        requestWrapper.body = JSON.parse(body);
 
         REPLACE_LIST.forEach((replacement) => {
             if (replacement.regex.test(requestWrapper.url)) {
@@ -55,6 +52,5 @@ export class ProtoHandler extends Handler {
                 logger.warn("Removed " + replacement.name + " in url")
             }
         })
-
     }
 }
