@@ -13,13 +13,15 @@
     "watch:core": "cd packages/core && tsc -b -w",
     "watch:express": "cd packages/express && tsc -b -w",
     "watch:nest": "cd packages/nest && tsc -b -w",
-    "watch:all": "concurrently -k -n CORE,EXPRESS,NEST \"npm run watch:core\" \"npm run watch:express\" \"npm run watch:nest\"",
+    "watch:koa": "cd packages/koa && tsc -b -w",
+    "watch:all": "concurrently -k -n CORE,EXPRESS,NEST \"npm run watch:core\" \"npm run watch:express\" \"npm run watch:nest\"  \"npm run watch:koa\"",
     "dev:api": "npm run build && cd apps/nest-api && npm run start:dev"
   },
   "workspaces": [
     "packages/core",
     "packages/express",
-    "packages/nest"
+    "packages/nest",
+    "packages/koa"
   ],
   "keywords": [],
   "author": "",

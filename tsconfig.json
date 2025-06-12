@@ -3,7 +3,8 @@
   "references": [
     { "path": "packages/core" },
     { "path": "packages/express" },
-    { "path": "packages/nest" }
+    { "path": "packages/nest" },
+    { "path": "packages/koa" }
   ],
   "compilerOptions": {
     "target": "ES6",
@@ -19,7 +20,8 @@
     "paths": {
       "@middleware/core": ["packages/core/dist"],
       "@middleware/express": ["packages/express/dist"],
-      "@middleware/nest": ["packages/nest/dist"]
+      "@middleware/nest": ["packages/nest/dist"],
+      "@middleware/koa": ["packages/koa/dist"]
     }
   }
 }

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "rootDir": "src",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "strict": true
+  },
+  "paths": {
+    "@middleware/core": ["../../packages/core/dist"],
+    "@middleware/koa": ["../../packages/koa/dist"]
+  }
+}
